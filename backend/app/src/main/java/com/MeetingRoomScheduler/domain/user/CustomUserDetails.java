@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.security;
+package com.MeetingRoomScheduler.domain.user;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

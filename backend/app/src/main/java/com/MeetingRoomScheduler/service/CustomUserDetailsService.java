@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.security;
+package com.MeetingRoomScheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.MeetingRoomScheduler.domain.user.CustomUserDetails;
 import com.MeetingRoomScheduler.domain.user.User;
-import com.MeetingRoomScheduler.service.UserService;
 
 import java.util.Collections;
 import java.util.List;

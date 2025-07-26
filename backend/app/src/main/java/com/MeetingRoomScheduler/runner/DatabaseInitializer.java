@@ -10,6 +10,7 @@ import com.MeetingRoomScheduler.domain.user.User;
 import com.MeetingRoomScheduler.security.SecurityConfig;
 import com.MeetingRoomScheduler.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +34,10 @@ public class DatabaseInitializer implements CommandLineRunner {
         log.info("Database initialized");
     }
 
-    private static final List<com.MeetingRoomScheduler.domain.user.User> USERS = Arrays.asList(
-            new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
-            new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER));
+    private static final List<User> USERS = Arrays.asList(
+            // Long id, String username, String name, String email, String role,
+            // LocalDateTime createAt,LocalDateTime updatedAt, boolean isActive
+
+            new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN, LocalDateTime.now(), true),
+            new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER, LocalDateTime.now(), true));
 }

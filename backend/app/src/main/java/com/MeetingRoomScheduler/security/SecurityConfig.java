@@ -32,12 +32,13 @@ public class SecurityConfig {
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 return http
                                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                                                .requestMatchers(HttpMethod.POST, "/api/orders")
-                                                .hasAnyAuthority(ADMIN, USER)
                                                 .requestMatchers(HttpMethod.GET, "/api/users/me")
                                                 .hasAnyAuthority(ADMIN, USER)
                                                 .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
                                                 .requestMatchers("/api/users", "/api/users/**").permitAll()
+                                                .requestMatchers("/api/rooms", "/api/rooms/**").permitAll()
+                                                .requestMatchers("/api/reservations", "/api/reservations/**")
+                                                .permitAll()
                                                 .requestMatchers("/public/**", "/auth/**").permitAll()
                                                 .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html",
                                                                 "/swagger-ui/**", "/v3/api-docs",

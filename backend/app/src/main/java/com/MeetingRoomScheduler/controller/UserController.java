@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.MeetingRoomScheduler.domain.user.CustomUserDetails;
 import com.MeetingRoomScheduler.domain.user.User;
-import com.MeetingRoomScheduler.dto.UserDto;
-import com.MeetingRoomScheduler.security.CustomUserDetails;
+import com.MeetingRoomScheduler.domain.user.UserDto;
 import com.MeetingRoomScheduler.service.UserService;
 
 import java.util.List;
