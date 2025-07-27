@@ -14,15 +14,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
         List<Reservation> findByRoomId(Long roomId);
 
-        List<Reservation> findByStatus(ReservationStatus status);
+        List<Reservation> findByUserId(Long userId);
 
         List<Reservation> findByRoomIdAndStatus(Long roomId, ReservationStatus status);
 
-        @Query("SELECT r FROM Reservation r WHERE r.room.id = :roomId " +
-                        "AND ((r.startTime < :endTime AND r.endTime > :startTime))")
-        List<Reservation> findByRoomIdAndTimeRange(
-                        @Param("roomId") Long roomId,
-                        @Param("startTime") LocalDateTime startTime,
-                        @Param("endTime") LocalDateTime endTime);
-
+        List<Reservation> findByStatus(ReservationStatus status);
 }

@@ -11,6 +11,8 @@ public interface ReservationService {
 
     List<Reservation> getReservationsByRoomId(Long roomId);
 
+    List<Reservation> getReservationsByUserId(Long userId);
+
     List<Reservation> getReservationsByStatus(ReservationStatus status);
 
     List<Reservation> getReservationsByRoomAndStatus(Long roomId, ReservationStatus status);
@@ -19,5 +21,5 @@ public interface ReservationService {
 
     void deleteReservation(Reservation reservation);
 
-    public Reservation validateAndGetReservation(Long id);
+    Reservation validateAndGetReservation(Long id);
 }

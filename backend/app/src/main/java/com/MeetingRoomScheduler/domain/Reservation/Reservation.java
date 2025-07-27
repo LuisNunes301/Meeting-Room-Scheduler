@@ -5,10 +5,11 @@ import lombok.*;
 
 import com.MeetingRoomScheduler.domain.room.Room;
 import com.MeetingRoomScheduler.domain.user.User;
-import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "reservations")
@@ -23,11 +24,11 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
@@ -41,11 +42,10 @@ public class Reservation {
     @Column(nullable = false)
     private ReservationStatus status;
 
-    private Instant createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @PrePersist
-    public void onPrePersist() {
-        createdAt = Instant.now();
-    }
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }

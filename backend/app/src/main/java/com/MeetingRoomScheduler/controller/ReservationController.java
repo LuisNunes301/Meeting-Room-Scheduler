@@ -33,24 +33,34 @@ public class ReservationController {
     @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
     @GetMapping
     public List<ReservationDto> getReservations(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestParam(value = "roomId", required = false) Long roomId,
             @RequestParam(value = "status", required = false) ReservationStatus status) {
 
+        Long userId = currentUser.getId();
         List<Reservation> reservations;
 
         if (roomId != null && status != null) {
-            reservations = reservationService.getReservationsByRoomAndStatus(roomId, status);
+            reservations = reservationService.getAllReservations().stream()
+                    .filter(r -> r.getUser().getId().equals(userId))
+                    .filter(r -> r.getRoom().getId().equals(roomId))
+                    .filter(r -> r.getStatus().equals(status))
+                    .toList();
         } else if (roomId != null) {
-            reservations = reservationService.getReservationsByRoomId(roomId);
+            reservations = reservationService.getReservationsByRoomId(roomId).stream()
+                    .filter(r -> r.getUser().getId().equals(userId))
+                    .toList();
         } else if (status != null) {
-            reservations = reservationService.getReservationsByStatus(status);
+            reservations = reservationService.getReservationsByStatus(status).stream()
+                    .filter(r -> r.getUser().getId().equals(userId))
+                    .toList();
         } else {
-            reservations = reservationService.getAllReservations();
+            reservations = reservationService.getReservationsByUserId(userId);
         }
 
         return reservations.stream()
                 .map(ReservationDto::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @PostMapping
@@ -62,7 +72,7 @@ public class ReservationController {
 
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
 
-        Room room = roomService.validateAndGetRoom(request.roomId()); // agora existe o campo roomId()
+        Room room = roomService.validateAndGetRoom(request.roomId());
 
         Reservation reservation = Reservation.builder()
                 .user(user)

@@ -35,8 +35,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Reservation> getReservationsByUserId(Long userId) {
+        return reservationRepository.findByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Reservation> getReservationsByStatus(ReservationStatus status) {
         return reservationRepository.findByStatus(status);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Reservation> getReservationsByRoomAndStatus(Long roomId, ReservationStatus status) {
+        return reservationRepository.findByRoomIdAndStatus(roomId, status);
     }
 
     @Override
@@ -56,11 +68,5 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation validateAndGetReservation(Long id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation with id " + id + " not found"));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Reservation> getReservationsByRoomAndStatus(Long roomId, ReservationStatus status) {
-        return reservationRepository.findByRoomIdAndStatus(roomId, status);
     }
 }
