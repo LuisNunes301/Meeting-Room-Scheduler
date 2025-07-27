@@ -1,46 +1,51 @@
-// package com.MeetingRoomScheduler.domain.Reservation;
+package com.MeetingRoomScheduler.domain.Reservation;
 
-// import jakarta.persistence.*;
-// import lombok.*;
-// import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.*;
+import lombok.*;
 
-// import com.MeetingRoomScheduler.domain.room.Room;
-// import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.domain.room.Room;
+import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
 
-// import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
-// @Entity
-// @Table(name = "reservations")
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// @AllArgsConstructor
-// @Builder
-// public class Reservation {
+@Entity
+@Table(name = "reservations")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Reservation {
 
-// @Id
-// @GeneratedValue(strategy = GenerationType.IDENTITY)
-// private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-// @ManyToOne(fetch = FetchType.LAZY)
-// @JoinColumn(name = "user_id", nullable = false)
-// private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-// @ManyToOne(fetch = FetchType.LAZY)
-// @JoinColumn(name = "room_id", nullable = false)
-// private Room room;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
-// @Column(nullable = false)
-// private LocalDateTime startTime;
+    @Column(nullable = false)
+    private LocalDateTime startTime;
 
-// @Column(nullable = false)
-// private LocalDateTime endTime;
+    @Column(nullable = false)
+    private LocalDateTime endTime;
 
-// @Enumerated(EnumType.STRING)
-// @Column(nullable = false)
-// private ReservationStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReservationStatus status;
 
-// @CreationTimestamp
-// @Column(name = "created_at", nullable = false, updatable = false)
-// private LocalDateTime createdAt;
-// }
+    private Instant createdAt;
+
+    @PrePersist
+    public void onPrePersist() {
+        createdAt = Instant.now();
+    }
+
+}

@@ -30,6 +30,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Room validateAndGetRoom(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room with id " + id + " not found"));
+    }
+
+    @Override
     public List<Room> getAvailableRooms() {
         return roomRepository.findByAvailableTrue();
     }

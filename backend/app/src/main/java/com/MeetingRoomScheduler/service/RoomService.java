@@ -16,6 +16,8 @@ public interface RoomService {
 
     List<Room> getRoomsByLocation(String location);
 
+    Room validateAndGetRoom(Long id);
+
     Room updateRoom(Room room);
 
     void deleteRoom(Long id);
