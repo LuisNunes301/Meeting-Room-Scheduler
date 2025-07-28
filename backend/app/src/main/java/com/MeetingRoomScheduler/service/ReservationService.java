@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.MeetingRoomScheduler.domain.Reservation.Reservation;
 import com.MeetingRoomScheduler.domain.Reservation.ReservationStatus;
+import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 
 public interface ReservationService {
 
@@ -22,4 +23,6 @@ public interface ReservationService {
     void deleteReservation(Reservation reservation);
 
     Reservation validateAndGetReservation(Long id);
+
+    ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation);
 }

@@ -2,11 +2,11 @@ package com.MeetingRoomScheduler.service.impl;
 
 import com.MeetingRoomScheduler.domain.Reservation.Reservation;
 import com.MeetingRoomScheduler.domain.Reservation.ReservationStatus;
+import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 import com.MeetingRoomScheduler.execptions.ReservationNotFoundException;
+import com.MeetingRoomScheduler.rabbit.ReservationCreatedPublisher;
 import com.MeetingRoomScheduler.repository.ReservationRepository;
 import com.MeetingRoomScheduler.service.ReservationService;
-import com.MeetingRoomScheduler.service.RoomService;
-import com.MeetingRoomScheduler.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,7 @@ import java.util.List;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final RoomService roomService;
-    private final UserService userService;
+    private final ReservationCreatedPublisher reservationCreatedPublisher;
 
     @Override
     @Transactional(readOnly = true)
@@ -54,7 +53,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public Reservation saveReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
+        Reservation saved = reservationRepository.save(reservation);
+        ReservationCreatedEvent event = toReservationCreatedEvent(saved);
+
+        reservationCreatedPublisher.publish(event);
+
+        return saved;
     }
 
     @Override
@@ -69,4 +73,16 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation with id " + id + " not found"));
     }
+
+    public ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation) {
+        return new ReservationCreatedEvent(
+                reservation.getUser().getName(),
+                reservation.getUser().getEmail(),
+                reservation.getRoom().getName(),
+                reservation.getRoom().getLocation(),
+                reservation.getStartTime(),
+                reservation.getEndTime(),
+                "admin@sistema.com");
+    }
+
 }
