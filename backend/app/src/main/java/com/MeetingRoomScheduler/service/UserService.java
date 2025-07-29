@@ -20,4 +20,9 @@ public interface UserService {
     User saveUser(User user);
 
     void deleteUser(User user);
+
+    Optional<User> getUserByEmail(String email);
+
+    // void changePassword(String token, String newPassword);
+
 }

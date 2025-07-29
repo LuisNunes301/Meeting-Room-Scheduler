@@ -1,7 +1,5 @@
 package com.MeetingRoomScheduler.rabbit;
 
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -13,32 +11,61 @@ import org.springframework.amqp.core.*;
 @Configuration
 public class RabbitMQConfig {
 
+    // User registration
+    public static final String USER_REGISTERED_QUEUE = "user.registered";
+    public static final String USER_CREATED_EXCHANGE = "user.created.exchange";
+    public static final String USER_REGISTERED_ROUTING_KEY = "user.registered";
+
+    // Reservation creation
+    public static final String RESERVATION_CREATED_QUEUE = "reservation.created.queue";
+    public static final String RESERVATION_CREATED_EXCHANGE = "reservation.exchange";
+    public static final String RESERVATION_CREATED_ROUTING_KEY = "reservation.created";
+
+    @Bean
+    public Queue userRegisteredQueue() {
+        return QueueBuilder.durable(USER_REGISTERED_QUEUE).build();
+    }
+
+    @Bean
+    public DirectExchange userCreatedExchange() {
+        return new DirectExchange(USER_CREATED_EXCHANGE);
+    }
+
+    @Bean
+    public Binding userRegisteredBinding() {
+        return BindingBuilder
+                .bind(userRegisteredQueue())
+                .to(userCreatedExchange())
+                .with(USER_REGISTERED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue reservationCreatedQueue() {
+        return QueueBuilder.durable(RESERVATION_CREATED_QUEUE).build();
+    }
+
+    @Bean
+    public DirectExchange reservationCreatedExchange() {
+        return new DirectExchange(RESERVATION_CREATED_EXCHANGE);
+    }
+
+    @Bean
+    public Binding reservationCreatedBinding() {
+        return BindingBuilder
+                .bind(reservationCreatedQueue())
+                .to(reservationCreatedExchange())
+                .with(RESERVATION_CREATED_ROUTING_KEY);
+    }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-        return rabbitTemplate;
-    }
-
-    @Bean
-    public Queue reservationCreatedQueue() {
-        return new Queue("reservation.created", true);
-    }
-
-    @Bean
-    public DirectExchange reservationExchange() {
-        return new DirectExchange("reservation.exchange");
-    }
-
-    @Bean
-    public Binding reservationBinding(Queue reservationCreatedQueue, DirectExchange reservationExchange) {
-        return BindingBuilder.bind(reservationCreatedQueue)
-                .to(reservationExchange)
-                .with("reservation.created");
+    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(jsonMessageConverter());
+        return template;
     }
 }

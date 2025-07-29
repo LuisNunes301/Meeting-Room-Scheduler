@@ -1,9 +1,10 @@
-package com.MeetingRoomScheduler.rabbit;
+package com.MeetingRoomScheduler.rabbit.reservation;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
+import com.MeetingRoomScheduler.rabbit.RabbitMQConfig;
 
 @Component
 public class ReservationCreatedPublisher {
@@ -15,6 +16,9 @@ public class ReservationCreatedPublisher {
     }
 
     public void publish(ReservationCreatedEvent event) {
-        rabbitTemplate.convertAndSend("reservation.exchange", "reservation.created", event);
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.RESERVATION_CREATED_EXCHANGE,
+                RabbitMQConfig.RESERVATION_CREATED_ROUTING_KEY,
+                event);
     }
 }

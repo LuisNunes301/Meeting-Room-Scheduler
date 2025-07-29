@@ -4,18 +4,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.dto.event.UserRegisteredEvent;
 import com.MeetingRoomScheduler.execptions.UserNotFoundException;
+import com.MeetingRoomScheduler.rabbit.userRegister.*;
 import com.MeetingRoomScheduler.repository.UserRepository;
 import com.MeetingRoomScheduler.service.UserService;
+
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserCreatedPublisher userCreatedPublisher;
+
+    public UserServiceImpl(UserRepository userRepository, UserCreatedPublisher userCreatedPublisher) {
+        this.userRepository = userRepository;
+        this.userCreatedPublisher = userCreatedPublisher;
+    }
 
     @Override
     public List<User> getUsers() {
@@ -45,12 +55,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User saveUser(User user) {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        UserRegisteredEvent event = new UserRegisteredEvent(
+                savedUser.getName(),
+                savedUser.getEmail());
+
+        userCreatedPublisher.publish(event); // <-- Certifique-se que está sendo chamado
+
+        return savedUser;
     }
 
     @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
 }

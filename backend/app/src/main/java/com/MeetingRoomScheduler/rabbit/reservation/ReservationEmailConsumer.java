@@ -1,6 +1,7 @@
-package com.MeetingRoomScheduler.rabbit;
+package com.MeetingRoomScheduler.rabbit.reservation;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
+import com.MeetingRoomScheduler.rabbit.RabbitMQConfig;
 import com.MeetingRoomScheduler.service.impl.EmailService;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,7 +19,7 @@ public class ReservationEmailConsumer {
         this.emailService = emailService;
     }
 
-    @RabbitListener(queues = "reservation.created")
+    @RabbitListener(queues = RabbitMQConfig.RESERVATION_CREATED_QUEUE)
     public void handleReservationCreated(ReservationCreatedEvent event) {
         Map<String, Object> model = new HashMap<>();
         model.put("userName", event.getUserName());
@@ -27,18 +28,22 @@ public class ReservationEmailConsumer {
         model.put("startTime", event.getStartTime());
         model.put("endTime", event.getEndTime());
 
-        // Email para usuário
-        emailService.sendHtmlEmail(
-                event.getUserEmail(),
-                "Confirmação de Reserva",
-                model,
-                "email-cliente");
+        try {
+            // Email para o usuário
+            emailService.sendHtmlEmail(
+                    event.getUserEmail(),
+                    "Confirmação de Reserva",
+                    model,
+                    "email-cliente");
 
-        // Email para admin
-        emailService.sendHtmlEmail(
-                event.getAdminEmail(),
-                "Nova Reserva Realizada",
-                model,
-                "email-admin");
+            // Email para o admin
+            emailService.sendHtmlEmail(
+                    event.getAdminEmail(),
+                    "Nova Reserva Realizada",
+                    model,
+                    "email-admin");
+        } catch (Exception e) {
+            e.printStackTrace(); // Ou use um logger
+        }
     }
 }

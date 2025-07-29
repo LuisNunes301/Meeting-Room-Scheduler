@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,6 +56,45 @@ public class AuthController {
         String token = authenticateAndGetToken(signUpRequest.username(), signUpRequest.password());
         return new AuthResponse(token);
     }
+
+    // @PostMapping("/forgot-password")
+    // public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+    // Optional<User> userOptional = userService.getUserByEmail(email);
+    // if (userOptional.isEmpty())
+    // return ResponseEntity.notFound().build();
+
+    // User user = userOptional.get();
+
+    // // Gera token com tipo "PASSWORD_RESET"
+    // String token = tokenProvider.generatePasswordResetToken(user);
+
+    // System.out.println("Token gerado: " + token);
+
+    // return ResponseEntity.ok(token);
+    // }
+
+    // @PostMapping("/reset-password")
+    // public ResponseEntity<Void> resetPassword(
+    // @RequestParam String token,
+    // @RequestParam String newPassword) {
+    // Optional<Jws<Claims>> jwsOptional =
+    // tokenProvider.validateTokenAndGetJws(token);
+    // if (jwsOptional.isEmpty())
+    // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+    // Jws<Claims> jws = jwsOptional.get();
+    // if (!"PASSWORD_RESET".equals(jws.getPayload().get("type"))) {
+    // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    // }
+
+    // String username = jws.getPayload().getSubject();
+    // User user = userService.validateAndGetUserByUsername(username);
+
+    // user.setPassword(passwordEncoder.encode(newPassword));
+    // userService.saveUser(user);
+
+    // return ResponseEntity.ok().build();
+    // }
 
     private String authenticateAndGetToken(String username, String password) {
         Authentication authentication = authenticationManager

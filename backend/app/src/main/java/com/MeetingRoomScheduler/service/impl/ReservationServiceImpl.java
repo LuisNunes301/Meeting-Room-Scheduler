@@ -4,7 +4,7 @@ import com.MeetingRoomScheduler.domain.Reservation.Reservation;
 import com.MeetingRoomScheduler.domain.Reservation.ReservationStatus;
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 import com.MeetingRoomScheduler.execptions.ReservationNotFoundException;
-import com.MeetingRoomScheduler.rabbit.ReservationCreatedPublisher;
+import com.MeetingRoomScheduler.rabbit.reservation.ReservationCreatedPublisher;
 import com.MeetingRoomScheduler.repository.ReservationRepository;
 import com.MeetingRoomScheduler.service.ReservationService;
 import lombok.RequiredArgsConstructor;
