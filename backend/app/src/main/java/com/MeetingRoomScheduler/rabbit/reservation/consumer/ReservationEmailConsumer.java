@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.rabbit.reservation;
+package com.MeetingRoomScheduler.rabbit.reservation.consumer;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 import com.MeetingRoomScheduler.rabbit.RabbitMQConfig;

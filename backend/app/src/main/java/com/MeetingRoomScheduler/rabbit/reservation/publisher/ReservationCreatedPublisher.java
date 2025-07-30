@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.rabbit.reservation;
+package com.MeetingRoomScheduler.rabbit.reservation.publisher;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;

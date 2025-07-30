@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bem-vindo!</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #eef2f5; padding: 20px; }
+        .container { background: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+        h2 { color: #34495e; }
+        p { font-size: 16px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888888; }
+    </style>
 </head>
 <body>
-    <h2>Olá, <span th:text="${userName}"></span>!</h2>
-    <p>Seja bem-vindo ao nosso sistema de reservas. Agora você pode agendar suas salas com facilidade!</p>
+    <div class="container">
+        <h2>Olá, [[${userName}]]!</h2>
+        <p>Seja bem-vindo ao nosso sistema de reservas. Agora você pode agendar suas salas com facilidade!</p>
+        <div class="footer">
+            © 2025 Meeting Room Scheduler
+        </div>
+    </div>
 </body>
 </html>

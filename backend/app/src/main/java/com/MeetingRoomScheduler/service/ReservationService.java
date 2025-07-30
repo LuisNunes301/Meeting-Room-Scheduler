@@ -2,9 +2,9 @@ package com.MeetingRoomScheduler.service;
 
 import java.util.List;
 
-import com.MeetingRoomScheduler.domain.Reservation.Reservation;
-import com.MeetingRoomScheduler.domain.Reservation.ReservationStatus;
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
+import com.MeetingRoomScheduler.entities.Reservation.Reservation;
+import com.MeetingRoomScheduler.entities.Reservation.ReservationStatus;
 
 public interface ReservationService {
 

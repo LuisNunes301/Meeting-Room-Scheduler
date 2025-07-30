@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.MeetingRoomScheduler.domain.user.User;
 import com.MeetingRoomScheduler.dto.request.LoginRequest;
 import com.MeetingRoomScheduler.dto.request.SignUpRequest;
 import com.MeetingRoomScheduler.dto.response.AuthResponse;
+import com.MeetingRoomScheduler.entities.user.User;
 import com.MeetingRoomScheduler.execptions.DuplicatedUserInfoException;
 import com.MeetingRoomScheduler.security.SecurityConfig;
 import com.MeetingRoomScheduler.security.TokenProvider;

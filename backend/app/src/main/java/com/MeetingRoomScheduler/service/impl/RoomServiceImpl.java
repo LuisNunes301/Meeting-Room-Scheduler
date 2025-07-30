@@ -1,6 +1,6 @@
 package com.MeetingRoomScheduler.service.impl;
 
-import com.MeetingRoomScheduler.domain.room.Room;
+import com.MeetingRoomScheduler.entities.room.Room;
 import com.MeetingRoomScheduler.repository.RoomRepository;
 import com.MeetingRoomScheduler.service.RoomService;
 import lombok.RequiredArgsConstructor;

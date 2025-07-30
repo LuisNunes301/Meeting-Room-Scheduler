@@ -1,10 +1,9 @@
 package com.MeetingRoomScheduler.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.MeetingRoomScheduler.domain.user.User;
 import com.MeetingRoomScheduler.dto.event.UserRegisteredEvent;
+import com.MeetingRoomScheduler.entities.user.User;
 import com.MeetingRoomScheduler.execptions.UserNotFoundException;
 import com.MeetingRoomScheduler.rabbit.userRegister.*;
 import com.MeetingRoomScheduler.repository.UserRepository;

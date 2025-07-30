@@ -3,7 +3,7 @@ package com.MeetingRoomScheduler.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.entities.user.User;
 
 public interface UserService {
 

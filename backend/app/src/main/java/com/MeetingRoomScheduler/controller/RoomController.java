@@ -1,8 +1,8 @@
 package com.MeetingRoomScheduler.controller;
 
-import com.MeetingRoomScheduler.domain.room.Room;
 import com.MeetingRoomScheduler.dto.request.RoomRequest;
 import com.MeetingRoomScheduler.dto.response.RoomResponse;
+import com.MeetingRoomScheduler.entities.room.Room;
 import com.MeetingRoomScheduler.service.RoomService;
 
 import io.swagger.v3.oas.annotations.Operation;

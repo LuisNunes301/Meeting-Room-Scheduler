@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.entities.user.User;
 import com.MeetingRoomScheduler.security.SecurityConfig;
 import com.MeetingRoomScheduler.service.UserService;
 

@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
+    <meta charset="UTF-8">
     <title>Nova Reserva</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f8f8; padding: 20px; }
+        .container { background: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+        h2 { color: #2c3e50; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888888; }
+    </style>
 </head>
 <body>
-    <p>Uma nova reserva foi feita por [[${userName}]].</p>
-    <ul>
-        <li><strong>Sala:</strong> [[${roomName}]]</li>
-        <li><strong>Local:</strong> [[${roomLocation}]]</li>
-        <li><strong>Início:</strong> [[${startTime}]]</li>
-        <li><strong>Fim:</strong> [[${endTime}]]</li>
-    </ul>
+    <div class="container">
+        <h2>Nova Reserva Realizada</h2>
+        <p>Uma nova reserva foi feita por <strong>[[${userName}]]</strong>.</p>
+        <ul>
+            <li><strong>Sala:</strong> [[${roomName}]]</li>
+            <li><strong>Local:</strong> [[${roomLocation}]]</li>
+            <li><strong>Início:</strong> [[${startTime}]]</li>
+            <li><strong>Fim:</strong> [[${endTime}]]</li>
+        </ul>
+        <div class="footer">
+            © 2025 Meeting Room Scheduler
+        </div>
+    </div>
 </body>
 </html>

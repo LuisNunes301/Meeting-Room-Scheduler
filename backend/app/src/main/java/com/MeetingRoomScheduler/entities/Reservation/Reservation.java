@@ -1,15 +1,15 @@
-package com.MeetingRoomScheduler.domain.Reservation;
+package com.MeetingRoomScheduler.entities.Reservation;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import com.MeetingRoomScheduler.domain.room.Room;
-import com.MeetingRoomScheduler.domain.user.User;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.MeetingRoomScheduler.entities.room.Room;
+import com.MeetingRoomScheduler.entities.user.User;
 
 @Entity
 @Table(name = "reservations")

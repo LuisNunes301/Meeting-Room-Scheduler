@@ -1,11 +1,11 @@
 package com.MeetingRoomScheduler.controller;
 
-import com.MeetingRoomScheduler.domain.Reservation.*;
-import com.MeetingRoomScheduler.domain.room.Room;
-import com.MeetingRoomScheduler.domain.user.CustomUserDetails;
-import com.MeetingRoomScheduler.domain.user.User;
 import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
 import com.MeetingRoomScheduler.dto.request.UpdateReservationStatusRequest;
+import com.MeetingRoomScheduler.entities.Reservation.*;
+import com.MeetingRoomScheduler.entities.room.Room;
+import com.MeetingRoomScheduler.entities.user.CustomUserDetails;
+import com.MeetingRoomScheduler.entities.user.User;
 import com.MeetingRoomScheduler.service.ReservationService;
 import com.MeetingRoomScheduler.service.RoomService;
 import com.MeetingRoomScheduler.service.UserService;

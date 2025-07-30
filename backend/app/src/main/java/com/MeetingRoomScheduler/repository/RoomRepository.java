@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.MeetingRoomScheduler.domain.room.Room;
+import com.MeetingRoomScheduler.entities.room.Room;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {

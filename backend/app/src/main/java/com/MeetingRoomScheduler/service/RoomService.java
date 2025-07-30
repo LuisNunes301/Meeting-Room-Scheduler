@@ -1,7 +1,8 @@
 package com.MeetingRoomScheduler.service;
 
-import com.MeetingRoomScheduler.domain.room.Room;
 import java.util.List;
+
+import com.MeetingRoomScheduler.entities.room.Room;
 
 public interface RoomService {
     Room createRoom(Room room);

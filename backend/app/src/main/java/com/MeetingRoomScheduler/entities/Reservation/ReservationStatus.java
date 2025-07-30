@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.domain.Reservation;
+package com.MeetingRoomScheduler.entities.Reservation;
 
 public enum ReservationStatus {
     PENDING, CONFIRMED, CANCELLED

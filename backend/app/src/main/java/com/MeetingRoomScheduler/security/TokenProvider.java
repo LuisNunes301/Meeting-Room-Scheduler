@@ -14,8 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.MeetingRoomScheduler.domain.user.CustomUserDetails;
-import com.MeetingRoomScheduler.domain.user.User;
+import com.MeetingRoomScheduler.entities.user.CustomUserDetails;
+import com.MeetingRoomScheduler.entities.user.User;
 
 import java.time.Instant;
 import java.util.Date;

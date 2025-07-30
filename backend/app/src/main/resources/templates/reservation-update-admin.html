@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reserva Atualizada</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { background-color: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+        h2 { color: #34495e; }
+        .details { margin-top: 20px; }
+        .details td { padding: 8px 0; }
+        .footer { margin-top: 30px; font-size: 12px; color: #999999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Uma Reserva Foi Atualizada</h2>
+        <p>Olá Administrador,</p>
+        <p>Uma reserva teve seu status alterado. Seguem os detalhes:</p>
+
+        <table class="details">
+            <tr>
+                <td><strong>ID da Reserva:</strong></td>
+                <td th:text="${reservationId}"></td>
+            </tr>
+            <tr>
+                <td><strong>Sala:</strong></td>
+                <td th:text="${roomName}"></td>
+            </tr>
+            <tr>
+                <td><strong>Status Anterior:</strong></td>
+                <td th:text="${oldStatus}"></td>
+            </tr>
+            <tr>
+                <td><strong>Novo Status:</strong></td>
+                <td th:text="${newStatus}"></td>
+            </tr>
+            <tr>
+                <td><strong>Data da Atualização:</strong></td>
+                <td th:text="${updatedAt}"></td>
+            </tr>
+        </table>
+
+        <p>Verifique os detalhes no painel administrativo, se necessário.</p>
+
+        <div class="footer">
+            © 2025 Meeting Room Scheduler
+        </div>
+    </div>
+</body>
+</html>

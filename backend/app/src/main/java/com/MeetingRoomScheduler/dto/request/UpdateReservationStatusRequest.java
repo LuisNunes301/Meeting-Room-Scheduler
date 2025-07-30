@@ -1,9 +1,9 @@
 package com.MeetingRoomScheduler.dto.request;
 
-import com.MeetingRoomScheduler.domain.Reservation.ReservationStatus;
+import com.MeetingRoomScheduler.entities.Reservation.ReservationStatus;
 
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateReservationStatusRequest(
-        @NotNull ReservationStatus status) {
+                @NotNull ReservationStatus status) {
 }

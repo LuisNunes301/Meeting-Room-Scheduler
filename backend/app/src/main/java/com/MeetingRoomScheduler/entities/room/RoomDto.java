@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.domain.room;
+package com.MeetingRoomScheduler.entities.room;
 
 import java.time.LocalDateTime;
 
