@@ -13,7 +13,7 @@ public record RoomDto(
         String description,
         String equipment,
         @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime createdAt,
-        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime updatedAt) {
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime updatedAt, Double price) {
     public static RoomDto from(Room room) {
         return new RoomDto(
                 room.getId(),
@@ -24,6 +24,6 @@ public record RoomDto(
                 room.getDescription(),
                 room.getEquipment(),
                 room.getCreatedAt(),
-                room.getUpdatedAt());
+                room.getUpdatedAt(), room.getPrice());
     }
 }

@@ -5,6 +5,7 @@ import com.MeetingRoomScheduler.domain.room.Room;
 import com.MeetingRoomScheduler.domain.user.CustomUserDetails;
 import com.MeetingRoomScheduler.domain.user.User;
 import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
+import com.MeetingRoomScheduler.dto.request.UpdateReservationStatusRequest;
 import com.MeetingRoomScheduler.service.ReservationService;
 import com.MeetingRoomScheduler.service.RoomService;
 import com.MeetingRoomScheduler.service.UserService;
@@ -87,11 +88,10 @@ public class ReservationController {
     @PutMapping("/{id}/status")
     public ReservationDto updateReservationStatus(
             @PathVariable Long id,
-            @RequestParam ReservationStatus status) {
+            @Valid @RequestBody UpdateReservationStatusRequest request) {
 
-        Reservation reservation = reservationService.validateAndGetReservation(id);
-        reservation.setStatus(status);
-        return ReservationDto.from(reservationService.saveReservation(reservation));
+        Reservation updated = reservationService.updateReservationStatus(id, request.status());
+        return ReservationDto.from(updated);
     }
 
     @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })

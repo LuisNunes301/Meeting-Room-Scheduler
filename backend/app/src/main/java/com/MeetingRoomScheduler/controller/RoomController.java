@@ -37,6 +37,7 @@ public class RoomController {
                 room.getAvailable(),
                 room.getDescription(),
                 room.getEquipment(),
+                room.getPrice(),
                 room.getCreatedAt(),
                 room.getUpdatedAt());
     }
@@ -49,7 +50,13 @@ public class RoomController {
         room.setCapacity(roomRequest.capacity());
         room.setAvailable(roomRequest.available());
         room.setDescription(roomRequest.description());
+        room.setPrice(roomRequest.price());
         room.setEquipment(roomRequest.equipment());
+        if (roomRequest.price() != null) {
+            room.setPrice(roomRequest.price());
+        } else {
+            room.setPrice(0.0);
+        }
         return room;
     }
 

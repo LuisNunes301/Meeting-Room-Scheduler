@@ -74,6 +74,42 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation with id " + id + " not found"));
     }
 
+    @Override
+    public void releaseReservationSlot(Reservation reservation) {
+        // Você pode personalizar isso conforme sua lógica.
+        System.out.println("Slot liberado: " + reservation.getRoom().getName()
+                + " de " + reservation.getStartTime() + " até " + reservation.getEndTime());
+    }
+
+    @Override
+    public Reservation updateReservationStatus(Long id, ReservationStatus newStatus) {
+        Reservation reservation = validateAndGetReservation(id);
+
+        // Impede alterações em reservas canceladas
+        if (reservation.getStatus() == ReservationStatus.CANCELLED) {
+            throw new IllegalStateException("Reservas canceladas não podem ser alteradas.");
+        }
+
+        // Validação de transições
+        if (reservation.getStatus() == ReservationStatus.PENDING && newStatus == ReservationStatus.CONFIRMED) {
+            // OK
+        } else if (newStatus == ReservationStatus.CANCELLED) {
+            // OK
+        } else {
+            throw new IllegalStateException("Transição de status inválida.");
+        }
+
+        // Atualiza status
+        reservation.setStatus(newStatus);
+
+        // Libera slot se for cancelado
+        if (newStatus == ReservationStatus.CANCELLED) {
+            releaseReservationSlot(reservation);
+        }
+
+        return reservationRepository.save(reservation);
+    }
+
     public ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation) {
         return new ReservationCreatedEvent(
                 reservation.getUser().getName(),

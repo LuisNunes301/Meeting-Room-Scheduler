@@ -25,4 +25,8 @@ public interface ReservationService {
     Reservation validateAndGetReservation(Long id);
 
     ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation);
+
+    Reservation updateReservationStatus(Long id, ReservationStatus newStatus);
+
+    void releaseReservationSlot(Reservation reservation);
 }

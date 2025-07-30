@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import com.MeetingRoomScheduler.domain.room.RoomDto;
 import com.MeetingRoomScheduler.domain.user.UserDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public record ReservationDto(Long id, RoomDto room, UserDto user, LocalDateTime createdAt, LocalDateTime startTime,
-        LocalDateTime endTime, ReservationStatus status) {
+public record ReservationDto(Long id, RoomDto room, UserDto user,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime createdAt,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime startTime,
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime endTime, ReservationStatus status) {
 
     public static ReservationDto from(Reservation reservation) {
         return new ReservationDto(

@@ -52,12 +52,14 @@ public class Room {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    private Double price;
 
-    public Room(String name, String location, Integer capacity, Boolean available) {
+    public Room(String name, String location, Integer capacity, Boolean available, Double price) {
         this.name = name;
         this.location = location;
         this.capacity = capacity;
         this.available = available;
+        this.price = price;
     }
 
 }

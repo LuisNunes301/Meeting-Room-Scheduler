@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record RoomRequest(
-        @NotBlank(message = "Nome da sala é obrigatório") String name,
+                @NotBlank(message = "Nome da sala é obrigatório") String name,
 
-        @NotBlank(message = "Localização é obrigatória") String location,
+                @NotBlank(message = "Localização é obrigatória") String location,
 
-        @NotNull(message = "Capacidade é obrigatória") @Positive(message = "Capacidade deve ser maior que zero") Integer capacity,
+                @NotNull(message = "Capacidade é obrigatória") @Positive(message = "Capacidade deve ser maior que zero") Integer capacity,
 
-        @NotNull(message = "Disponibilidade é obrigatória") Boolean available,
+                @NotNull(message = "Disponibilidade é obrigatória") Boolean available,
 
-        String description,
-        String equipment) {
+                String description,
+                String equipment,
+                Double price) {
 }
