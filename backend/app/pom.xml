@@ -112,7 +112,7 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- Stripe and mailtrap -->
+		<!-- Stripe and rabbit -->
 		<dependency>
     <groupId>org.springframework.amqp</groupId>
     <artifactId>spring-rabbit</artifactId>

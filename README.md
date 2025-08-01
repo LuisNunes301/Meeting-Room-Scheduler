@@ -14,7 +14,7 @@ Plataforma avançada para agendamento de salas com autenticação, painel admini
 - Spring Security (JWT)
 - RabbitMQ (Mensageria)
 - Stripe API (Pagamentos)
-- Mailtrap (Envio de E-mails)
+- MailHog (Envio de E-mails)
 - Swagger (Documentação de API)
 
 ### Frontend
