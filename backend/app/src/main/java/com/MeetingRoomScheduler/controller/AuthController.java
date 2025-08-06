@@ -1,10 +1,15 @@
 package com.MeetingRoomScheduler.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,14 +40,24 @@ public class AuthController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/authenticate")
-    public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
+    public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         String token = authenticateAndGetToken(loginRequest.username(), loginRequest.password());
-        return new AuthResponse(token);
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .secure(true) // true se estiver usando HTTPS
+                .path("/")
+                .maxAge(86400)
+                .sameSite("Lax")
+                .build();
+
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        return new AuthResponse("User authenticated successfully");
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
         if (userService.hasUserWithUsername(signUpRequest.username())) {
             throw new DuplicatedUserInfoException(
                     String.format("Username %s already been used", signUpRequest.username()));
@@ -54,7 +69,15 @@ public class AuthController {
         userService.saveUser(this.mapSignUpRequestToUser(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.username(), signUpRequest.password());
-        return new AuthResponse(token);
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .secure(true) // true se for HTTPS
+                .path("/")
+                .maxAge(86400)
+                .sameSite("Lax")
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return new AuthResponse("User registered successfully");
     }
 
     // @PostMapping("/forgot-password")

@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-        private final TokenAuthenticationFilter tokenAuthenticationFilter;
+        private final JwtCookieAuthenticationFilter jwtCookieAuthenticationFilter;
 
         @Bean
         AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -44,7 +44,8 @@ public class SecurityConfig {
                                                                 "/v3/api-docs/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
-                                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                .addFilterBefore(jwtCookieAuthenticationFilter,
+                                                UsernamePasswordAuthenticationFilter.class)
                                 .exceptionHandling(exceptionHandling -> exceptionHandling
                                                 .authenticationEntryPoint(
                                                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
