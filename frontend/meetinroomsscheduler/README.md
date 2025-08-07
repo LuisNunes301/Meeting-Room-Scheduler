@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Meeting Room Scheduler Frontend
+
+A modern React/Next.js frontend for the Meeting Room Scheduler application.
+
+## Features
+
+- 🚀 **Next.js 15** with App Router
+- 🎨 **Tailwind CSS** for styling
+- 🔄 **React Query** for data fetching
+- 📦 **Zustand** for state management
+- 🔐 **JWT Authentication** with cookies
+- 📱 **Responsive Design**
+- 🎯 **TypeScript** for type safety
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ 
+- npm or yarn
+- Backend server running on `http://localhost:8080`
+
+### Installation
+
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create environment file:
+```bash
+# Create .env.local file
+echo "NEXT_PUBLIC_API_URL=http://localhost:8080" > .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── dashboard/         # Dashboard page
+│   ├── login/            # Login page
+│   ├── signup/           # Signup page
+│   ├── globals.css       # Global styles
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Home page
+├── components/            # React components
+│   ├── auth/             # Authentication components
+│   └── layout/           # Layout components
+├── lib/                  # Utilities and configurations
+│   └── api.ts           # API client setup
+├── providers/            # React providers
+│   └── query-provider.tsx # React Query provider
+├── services/             # API services
+│   ├── auth.ts          # Authentication service
+│   ├── reservations.ts  # Reservation service
+│   └── rooms.ts         # Room service
+├── store/               # Zustand stores
+│   └── auth.ts          # Authentication store
+└── types/               # TypeScript types
+    └── index.ts         # Type definitions
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Deploy on Vercel
+## API Integration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The frontend communicates with the backend API at `http://localhost:8080`. Make sure your backend server is running before starting the frontend.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Authentication
+
+The app uses JWT tokens stored in HTTP-only cookies for authentication. The API client is configured to include credentials in all requests.
+
+### Key Features
+
+- **Landing Page**: Beautiful landing page with feature highlights
+- **Authentication**: Login and signup forms with validation
+- **Dashboard**: Overview of reservations and quick actions
+- **Responsive Design**: Works on desktop and mobile devices
+- **Type Safety**: Full TypeScript support
+
+## Development
+
+### Adding New Pages
+
+1. Create a new folder in `src/app/`
+2. Add a `page.tsx` file
+3. Export a default React component
+
+### Adding New Components
+
+1. Create a new folder in `src/components/`
+2. Add your component file
+3. Use the `'use client'` directive for client-side components
+
+### API Calls
+
+Use the services in `src/services/` for API calls:
+
+```typescript
+import { reservationService } from '@/services/reservations';
+
+// Get reservations
+const reservations = await reservationService.getReservations();
+
+// Create reservation
+const newReservation = await reservationService.createReservation(data);
+```
+
+## Deployment
+
+The app can be deployed to Vercel, Netlify, or any other platform that supports Next.js.
+
+1. Build the app: `npm run build`
+2. Deploy the `.next` folder and static assets
+3. Set environment variables in your deployment platform
+
+## Contributing
+
+1. Follow the existing code structure
+2. Use TypeScript for all new code
+3. Add proper error handling
+4. Test your changes thoroughly
