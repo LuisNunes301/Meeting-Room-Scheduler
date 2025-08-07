@@ -29,4 +29,8 @@ public interface ReservationService {
     Reservation updateReservationStatus(Long id, ReservationStatus newStatus);
 
     void releaseReservationSlot(Reservation reservation);
+
+    void cancelReservation(Reservation reservation);
+
+    void confirmReservation(Reservation reservation);
 }

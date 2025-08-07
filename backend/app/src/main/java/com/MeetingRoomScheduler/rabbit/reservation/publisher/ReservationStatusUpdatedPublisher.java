@@ -17,7 +17,7 @@ public class ReservationStatusUpdatedPublisher {
 
     public void publish(ReservationStatusUpdatedEvent event) {
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.RESERVATION_STATUS_UPDATED_EXCHANGE,
+                RabbitMQConfig.APP_DIRECT_EXCHANGE,
                 RabbitMQConfig.RESERVATION_STATUS_UPDATED_ROUTING_KEY,
                 event);
     }

@@ -61,7 +61,8 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getEndTime());
 
         if (hasConflict) {
-            throw new IllegalArgumentException("Já existe uma reserva para esta sala nesse intervalo de tempo.");
+            throw new IllegalArgumentException(
+                    "There is already a reservation for this room in the selected time interval.");
         }
 
         Reservation saved = reservationRepository.save(reservation);
@@ -85,10 +86,26 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
+    public void cancelReservation(Reservation reservation) {
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservationRepository.save(reservation);
+    }
+
+    @Override
+    @Transactional
+    public void confirmReservation(Reservation reservation) {
+        reservation.setStatus(ReservationStatus.CONFIRMED);
+        reservationRepository.save(reservation);
+    }
+
+    @Override
+    @Transactional
     public void releaseReservationSlot(Reservation reservation) {
-        // Você pode personalizar isso conforme sua lógica.
-        System.out.println("Slot liberado: " + reservation.getRoom().getName()
-                + " de " + reservation.getStartTime() + " até " + reservation.getEndTime());
+        reservation.setStatus(ReservationStatus.PENDING);
+        reservationRepository.save(reservation);
+        System.out.println("Slot released: " + reservation.getRoom().getName()
+                + " from " + reservation.getStartTime() + " to " + reservation.getEndTime());
     }
 
     @Override
@@ -96,27 +113,22 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = validateAndGetReservation(id);
 
         if (reservation.getStatus() == ReservationStatus.CANCELLED) {
-            throw new IllegalStateException("Reservas canceladas não podem ser alteradas.");
-        }
-
-        if (reservation.getStatus() == ReservationStatus.PENDING && newStatus == ReservationStatus.CONFIRMED) {
-            // OK
-        } else if (newStatus == ReservationStatus.CANCELLED) {
-            // OK
-        } else {
-            throw new IllegalStateException("Transição de status inválida.");
+            throw new IllegalStateException("Cancelled reservations cannot be changed.");
         }
 
         ReservationStatus oldStatus = reservation.getStatus();
-        reservation.setStatus(newStatus);
 
+        // Handle status transitions
         if (newStatus == ReservationStatus.CANCELLED) {
-            releaseReservationSlot(reservation);
+            cancelReservation(reservation);
+        } else if (reservation.getStatus() == ReservationStatus.PENDING && newStatus == ReservationStatus.CONFIRMED) {
+            confirmReservation(reservation);
+        } else {
+            throw new IllegalStateException("Invalid status transition from " + oldStatus + " to " + newStatus);
         }
 
         Reservation updated = reservationRepository.save(reservation);
 
-        // 🔔 Emite o evento
         ReservationStatusUpdatedEvent event = new ReservationStatusUpdatedEvent(
                 updated.getId(),
                 updated.getUser().getEmail(),

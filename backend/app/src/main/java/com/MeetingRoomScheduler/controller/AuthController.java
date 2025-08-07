@@ -5,11 +5,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.MeetingRoomScheduler.dto.request.LoginRequest;
+import com.MeetingRoomScheduler.dto.request.PasswordForgotRequest;
+import com.MeetingRoomScheduler.dto.request.PasswordResetRequest;
 import com.MeetingRoomScheduler.dto.request.SignUpRequest;
 import com.MeetingRoomScheduler.dto.response.AuthResponse;
 import com.MeetingRoomScheduler.entities.user.User;
@@ -80,44 +80,46 @@ public class AuthController {
         return new AuthResponse("User registered successfully");
     }
 
-    // @PostMapping("/forgot-password")
-    // public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-    // Optional<User> userOptional = userService.getUserByEmail(email);
-    // if (userOptional.isEmpty())
-    // return ResponseEntity.notFound().build();
+    @PostMapping("/forgot-password")
+    public AuthResponse forgotPassword(@Valid @RequestBody PasswordForgotRequest request) {
+        userService.sendPasswordForgotEmail(request.email());
 
-    // User user = userOptional.get();
+        return new AuthResponse("Password forgot link sent to email.");
+    }
 
-    // // Gera token com tipo "PASSWORD_RESET"
-    // String token = tokenProvider.generatePasswordResetToken(user);
+    @PostMapping("/reset-password")
+    public AuthResponse resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+        userService.resetPassword(request.token(), request.newPassword());
+        return new AuthResponse("Password reset successfully.");
+    }
 
-    // System.out.println("Token gerado: " + token);
+    @PostMapping("/refresh-token")
+    public AuthResponse refreshToken(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        String token = authenticateAndGetToken(loginRequest.username(), loginRequest.password());
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(86400)
+                .sameSite("Lax")
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return new AuthResponse("Token refreshed successfully.");
+    }
 
-    // return ResponseEntity.ok(token);
-    // }
-
-    // @PostMapping("/reset-password")
-    // public ResponseEntity<Void> resetPassword(
-    // @RequestParam String token,
-    // @RequestParam String newPassword) {
-    // Optional<Jws<Claims>> jwsOptional =
-    // tokenProvider.validateTokenAndGetJws(token);
-    // if (jwsOptional.isEmpty())
-    // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-    // Jws<Claims> jws = jwsOptional.get();
-    // if (!"PASSWORD_RESET".equals(jws.getPayload().get("type"))) {
-    // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    // }
-
-    // String username = jws.getPayload().getSubject();
-    // User user = userService.validateAndGetUserByUsername(username);
-
-    // user.setPassword(passwordEncoder.encode(newPassword));
-    // userService.saveUser(user);
-
-    // return ResponseEntity.ok().build();
-    // }
+    @PostMapping("/logout")
+    public AuthResponse logout(HttpServletResponse response) {
+        // Clear the JWT cookie by setting it with maxAge = 0
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0) // This immediately expires the cookie
+                .sameSite("Lax")
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return new AuthResponse("User logged out successfully");
+    }
 
     private String authenticateAndGetToken(String username, String password) {
         Authentication authentication = authenticationManager
@@ -135,4 +137,5 @@ public class AuthController {
         user.setCreatedAt(LocalDateTime.now());
         return user;
     }
+
 }

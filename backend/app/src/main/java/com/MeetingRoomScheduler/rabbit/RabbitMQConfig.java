@@ -10,20 +10,38 @@ import org.springframework.amqp.core.*;
 
 @Configuration
 public class RabbitMQConfig {
+    public static final String APP_DIRECT_EXCHANGE = "app.direct.exchange";
 
     // User registration
     public static final String USER_REGISTERED_QUEUE = "user.registered";
-    public static final String USER_CREATED_EXCHANGE = "user.created.exchange";
+
     public static final String USER_REGISTERED_ROUTING_KEY = "user.registered";
+    // Change password
+    public static final String USER_PASSWORD_FORGOT_QUEUE = "user.password.forgot";
+    public static final String USER_PASSWORD_FORGOT_EXCHANGE = "user.password.forgot.exchange";
+    public static final String USER_PASSWORD_FORGOT_ROUTING_KEY = "user.password.forgot";
 
     // Reservation creation
     public static final String RESERVATION_CREATED_QUEUE = "reservation.created.queue";
-    public static final String RESERVATION_CREATED_EXCHANGE = "reservation.exchange";
+
     public static final String RESERVATION_CREATED_ROUTING_KEY = "reservation.created";
-    // Ressrvation Update
+    // Reservation Update
     public static final String RESERVATION_STATUS_UPDATED_QUEUE = "reservation.status.updated.queue";
-    public static final String RESERVATION_STATUS_UPDATED_EXCHANGE = "reservation.status.updated.exchange";
+
     public static final String RESERVATION_STATUS_UPDATED_ROUTING_KEY = "reservation.status.updated";
+
+    @Bean
+    public Queue forgotQueue() {
+        return QueueBuilder.durable(USER_PASSWORD_FORGOT_QUEUE).build();
+    }
+
+    @Bean
+    public Binding forgotBinding() {
+        return BindingBuilder
+                .bind(forgotQueue())
+                .to(appDirectExchange())
+                .with(USER_PASSWORD_FORGOT_ROUTING_KEY);
+    }
 
     @Bean
     public Queue userRegisteredQueue() {
@@ -31,15 +49,10 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange userCreatedExchange() {
-        return new DirectExchange(USER_CREATED_EXCHANGE);
-    }
-
-    @Bean
     public Binding userRegisteredBinding() {
         return BindingBuilder
                 .bind(userRegisteredQueue())
-                .to(userCreatedExchange())
+                .to(appDirectExchange())
                 .with(USER_REGISTERED_ROUTING_KEY);
     }
 
@@ -49,15 +62,10 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange reservationCreatedExchange() {
-        return new DirectExchange(RESERVATION_CREATED_EXCHANGE);
-    }
-
-    @Bean
     public Binding reservationCreatedBinding() {
         return BindingBuilder
                 .bind(reservationCreatedQueue())
-                .to(reservationCreatedExchange())
+                .to(appDirectExchange())
                 .with(RESERVATION_CREATED_ROUTING_KEY);
     }
 
@@ -67,15 +75,15 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange reservationUpdatedExchange() {
-        return new DirectExchange(RESERVATION_STATUS_UPDATED_EXCHANGE);
+    public DirectExchange appDirectExchange() {
+        return new DirectExchange(APP_DIRECT_EXCHANGE);
     }
 
     @Bean
     public Binding reservationUpdatedBinding() {
         return BindingBuilder
                 .bind(reservationUpdatedQueue())
-                .to(reservationUpdatedExchange())
+                .to(appDirectExchange())
                 .with(RESERVATION_STATUS_UPDATED_ROUTING_KEY);
     }
 

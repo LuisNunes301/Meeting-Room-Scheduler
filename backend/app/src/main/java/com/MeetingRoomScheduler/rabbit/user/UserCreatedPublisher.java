@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.rabbit.userRegister;
+package com.MeetingRoomScheduler.rabbit.user;
 
 import com.MeetingRoomScheduler.dto.event.UserRegisteredEvent;
 import com.MeetingRoomScheduler.rabbit.RabbitMQConfig;
@@ -17,7 +17,7 @@ public class UserCreatedPublisher {
 
     public void publish(UserRegisteredEvent event) {
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.USER_CREATED_EXCHANGE,
+                RabbitMQConfig.APP_DIRECT_EXCHANGE,
                 RabbitMQConfig.USER_REGISTERED_ROUTING_KEY,
                 event);
     }

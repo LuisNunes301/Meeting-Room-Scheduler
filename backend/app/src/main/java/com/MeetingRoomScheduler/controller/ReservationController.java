@@ -87,17 +87,86 @@ public class ReservationController {
     @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
     @PutMapping("/{id}/status")
     public ReservationDto updateReservationStatus(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long id,
             @Valid @RequestBody UpdateReservationStatusRequest request) {
+
+        Reservation reservation = reservationService.validateAndGetReservation(id);
+
+        // Check if user is admin or owns the reservation
+        if (!currentUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN")) &&
+                !reservation.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalStateException("You can only update your own reservations.");
+        }
 
         Reservation updated = reservationService.updateReservationStatus(id, request.status());
         return ReservationDto.from(updated);
     }
 
+    @PostMapping("/{id}/cancel")
+    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    public ReservationDto cancelReservation(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long id) {
+        Reservation reservation = reservationService.validateAndGetReservation(id);
+
+        // Check if user is admin or owns the reservation
+        if (!currentUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN")) &&
+                !reservation.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalStateException("You can only cancel your own reservations.");
+        }
+
+        reservationService.cancelReservation(reservation);
+        return ReservationDto.from(reservation);
+    }
+
+    @PostMapping("/{id}/release")
+    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    public ReservationDto releaseReservation(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long id) {
+        Reservation reservation = reservationService.validateAndGetReservation(id);
+
+        // Check if user is admin or owns the reservation
+        if (!currentUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN")) &&
+                !reservation.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalStateException("You can only release your own reservations.");
+        }
+
+        reservationService.releaseReservationSlot(reservation);
+        return ReservationDto.from(reservation);
+    }
+
+    @PostMapping("/{id}/confirm")
+    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    public ReservationDto confirmReservation(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long id) {
+        Reservation reservation = reservationService.validateAndGetReservation(id);
+
+        // Check if user is admin or owns the reservation
+        if (!currentUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN")) &&
+                !reservation.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalStateException("You can only confirm your own reservations.");
+        }
+
+        reservationService.confirmReservation(reservation);
+        return ReservationDto.from(reservation);
+    }
+
     @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
     @DeleteMapping("/{id}")
-    public ReservationDto deleteReservation(@PathVariable Long id) {
+    public ReservationDto deleteReservation(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long id) {
         Reservation reservation = reservationService.validateAndGetReservation(id);
+
+        // Check if user is admin or owns the reservation
+        if (!currentUser.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN")) &&
+                !reservation.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalStateException("You can only delete your own reservations.");
+        }
+
         reservationService.deleteReservation(reservation);
         return ReservationDto.from(reservation);
     }

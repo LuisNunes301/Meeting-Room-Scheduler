@@ -17,7 +17,7 @@ public class ReservationCreatedPublisher {
 
     public void publish(ReservationCreatedEvent event) {
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.RESERVATION_CREATED_EXCHANGE,
+                RabbitMQConfig.APP_DIRECT_EXCHANGE,
                 RabbitMQConfig.RESERVATION_CREATED_ROUTING_KEY,
                 event);
     }

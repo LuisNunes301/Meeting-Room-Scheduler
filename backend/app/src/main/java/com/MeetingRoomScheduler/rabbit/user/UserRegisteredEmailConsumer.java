@@ -1,4 +1,4 @@
-package com.MeetingRoomScheduler.rabbit.userRegister;
+package com.MeetingRoomScheduler.rabbit.user;
 
 import com.MeetingRoomScheduler.dto.event.UserRegisteredEvent;
 import com.MeetingRoomScheduler.rabbit.RabbitMQConfig;

@@ -23,6 +23,10 @@ public interface UserService {
 
     Optional<User> getUserByEmail(String email);
 
-    // void changePassword(String token, String newPassword);
+    void updatePasswordByUsername(String username, String rawNewPassword);
+
+    void sendPasswordForgotEmail(String toEmail);
+
+    void resetPassword(String token, String newPassword);
 
 }
