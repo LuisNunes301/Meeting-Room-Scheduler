@@ -3,6 +3,7 @@ package com.MeetingRoomScheduler.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.MeetingRoomScheduler.dto.request.user.UserUpdateRequest;
 import com.MeetingRoomScheduler.entities.user.User;
 
 public interface UserService {
@@ -17,6 +18,8 @@ public interface UserService {
 
     User validateAndGetUserByUsername(String username);
 
+    User validateAndGetUserById(Long id);
+
     User saveUser(User user);
 
     void deleteUser(User user);
@@ -28,5 +31,7 @@ public interface UserService {
     void sendPasswordForgotEmail(String toEmail);
 
     void resetPassword(String token, String newPassword);
+
+    User updateUser(Long id, UserUpdateRequest request, boolean isAdmin);
 
 }

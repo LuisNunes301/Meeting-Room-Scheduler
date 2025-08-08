@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.MeetingRoomScheduler.dto.event.PasswordForgotEvent;
 import com.MeetingRoomScheduler.dto.event.UserRegisteredEvent;
+import com.MeetingRoomScheduler.dto.request.user.UserUpdateRequest;
 import com.MeetingRoomScheduler.entities.user.User;
+import com.MeetingRoomScheduler.execptions.DuplicatedUserInfoException;
 import com.MeetingRoomScheduler.execptions.InvalidTokenException;
 import com.MeetingRoomScheduler.execptions.UserNotFoundException;
 import com.MeetingRoomScheduler.rabbit.user.*;
@@ -66,6 +68,13 @@ public class UserServiceImpl implements UserService {
         return getUserByUsername(username)
                 .orElseThrow(
                         () -> new UserNotFoundException(String.format("User with username %s not found", username)));
+    }
+
+    @Override
+    public User validateAndGetUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(
+                        () -> new UserNotFoundException(String.format("User with id %d not found", id)));
     }
 
     @Override
@@ -139,5 +148,36 @@ public class UserServiceImpl implements UserService {
                 user.getName());
 
         passwordForgotPublisher.publish(event);
+    }
+
+    @Override
+    public User updateUser(Long id, UserUpdateRequest request, boolean isAdmin) {
+        User user = validateAndGetUserById(id);
+
+        // Verifica duplicidade de username (se mudou)
+        if (!user.getUsername().equals(request.username()) &&
+                hasUserWithUsername(request.username())) {
+            throw new DuplicatedUserInfoException(
+                    String.format("Username %s already in use", request.username()));
+        }
+
+        // Verifica duplicidade de email (se mudou)
+        if (!user.getEmail().equals(request.email()) &&
+                hasUserWithEmail(request.email())) {
+            throw new DuplicatedUserInfoException(
+                    String.format("Email %s already in use", request.email()));
+        }
+
+        // Atualiza campos permitidos
+        user.setName(request.name());
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+
+        // Admin pode mudar o role
+        if (isAdmin && request.role() != null) {
+            user.setRole(request.role());
+        }
+
+        return userRepository.save(user);
     }
 }

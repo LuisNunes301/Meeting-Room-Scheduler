@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.MeetingRoomScheduler.dto.request.LoginRequest;
-import com.MeetingRoomScheduler.dto.request.PasswordForgotRequest;
-import com.MeetingRoomScheduler.dto.request.PasswordResetRequest;
 import com.MeetingRoomScheduler.dto.request.SignUpRequest;
 import com.MeetingRoomScheduler.dto.response.AuthResponse;
 import com.MeetingRoomScheduler.entities.user.User;
@@ -39,7 +37,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         String token = authenticateAndGetToken(loginRequest.username(), loginRequest.password());
         ResponseCookie cookie = ResponseCookie.from("token", token)
@@ -78,19 +76,6 @@ public class AuthController {
                 .build();
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return new AuthResponse("User registered successfully");
-    }
-
-    @PostMapping("/forgot-password")
-    public AuthResponse forgotPassword(@Valid @RequestBody PasswordForgotRequest request) {
-        userService.sendPasswordForgotEmail(request.email());
-
-        return new AuthResponse("Password forgot link sent to email.");
-    }
-
-    @PostMapping("/reset-password")
-    public AuthResponse resetPassword(@Valid @RequestBody PasswordResetRequest request) {
-        userService.resetPassword(request.token(), request.newPassword());
-        return new AuthResponse("Password reset successfully.");
     }
 
     @PostMapping("/refresh-token")
