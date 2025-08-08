@@ -242,10 +242,6 @@ export default function AdminRoomsPage() {
                 {searchTerm ? 'Try adjusting your search terms.' : 'Get started by creating a new room.'}
               </p>
               <div className="mt-6">
-                <button className="btn-primary">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Room
-                </button>
               </div>
             </div>
           )}

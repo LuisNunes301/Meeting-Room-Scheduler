@@ -10,12 +10,12 @@ export const adminService = {
 
   async createUser(userData: {
     username: string;
-    password: string;
+    password?: string;
     name: string;
     email: string;
     role: 'ADMIN' | 'USER';
   }): Promise<User> {
-    const response = await api.post<User>('/api/users', userData);
+    const response = await api.post<User>('/api/users/create', userData);
     return response.data;
   },
 

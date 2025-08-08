@@ -18,7 +18,6 @@ export default function RoomPage() {
         console.log("to aqui", data);
         setRooms(data);
       } catch (err) {
-        setError('Failed to load rooms');
         console.error('Error fetching rooms:', err);
       } finally {
         setLoading(false);

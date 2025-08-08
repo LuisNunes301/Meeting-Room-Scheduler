@@ -4,7 +4,7 @@ import { LoginRequest, SignUpRequest, AuthResponse, User } from '@/types';
 export const authService = {
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>('/auth/authenticate', credentials);
+      const response = await api.post<AuthResponse>('/auth/login', credentials);
       return response.data;
     } catch (error) {
       console.error('Login error:', error);
@@ -42,23 +42,5 @@ export const authService = {
     }
   },
 
-  async forgotPassword(email: string): Promise<AuthResponse> {
-    try {
-      const response = await api.post<AuthResponse>('/auth/forgot-password', { email });
-      return response.data;
-    } catch (error) {
-      console.error('Forgot password error:', error);
-      throw error;
-    }
-  },
-
-  async resetPassword(token: string, newPassword: string): Promise<AuthResponse> {
-    try {
-      const response = await api.post<AuthResponse>('/auth/reset-password', { token, newPassword });
-      return response.data;
-    } catch (error) {
-      console.error('Reset password error:', error);
-      throw error;
-    }
-  },
+  
 };

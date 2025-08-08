@@ -1,13 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { Navbar } from '@/components/layout/navbar';
 import { CalendarDays, Building2, Clock, CheckCircle } from 'lucide-react';
+import { Reservation, Room } from '@/types';
+import { roomService } from '@/services/rooms';
+import { reservationService } from '@/services/reservations';
 
 export default function DashboardPage() {
   const { user, isAuthenticated, getCurrentUser } = useAuthStore();
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,7 +21,23 @@ export default function DashboardPage() {
         router.push('/login');
       });
     }
-  }, [isAuthenticated, getCurrentUser, router]);
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [roomsData, reservationsData] = await Promise.all([
+          roomService.getRooms(),
+          reservationService.getReservations(),
+        ]);
+        setRooms(roomsData);
+        setReservations(reservationsData);
+      } catch (error) {
+        // Optionally handle error
+      }
+    }
+    fetchData();
+  }, []);
 
   if (!isAuthenticated || !user) {
     return <div>Loading...</div>;
@@ -38,7 +59,7 @@ export default function DashboardPage() {
                 <CalendarDays className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Reservations</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900"> {reservations.length}</p>
                 </div>
               </div>
             </div>
@@ -48,7 +69,7 @@ export default function DashboardPage() {
                 <Building2 className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Available Rooms</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{rooms.filter(room => room.available).length}</p>
                 </div>
               </div>
             </div>
@@ -58,7 +79,7 @@ export default function DashboardPage() {
                 <Clock className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Pending</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{reservations.filter(reservation => reservation.status === 'PENDING').length}</p>
                 </div>
               </div>
             </div>
@@ -68,7 +89,7 @@ export default function DashboardPage() {
                 <CheckCircle className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{reservations.filter(reservation => reservation.status === 'CONFIRMED').length}</p>
                 </div>
               </div>
             </div>

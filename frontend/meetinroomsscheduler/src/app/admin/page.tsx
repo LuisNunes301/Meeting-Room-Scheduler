@@ -1,21 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { AdminNavbar } from '@/components/admin/admin-navbar';
-import { 
-  Users, 
-  Building2, 
-  CalendarDays, 
-  Settings, 
+import {
+  Users,
+  Building2,
+  CalendarDays,
+  Settings,
   AlertTriangle,
   CheckCircle,
   Clock
 } from 'lucide-react';
+import { roomService } from '@/services/rooms';
+import { reservationService } from '@/services/reservations';
+import { Reservation, Room,User } from '@/types';
+import userService from '@/services/user';
 
 export default function AdminPage() {
   const { user, isAuthenticated, getCurrentUser } = useAuthStore();
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,7 +34,23 @@ export default function AdminPage() {
       router.push('/dashboard');
     }
   }, [isAuthenticated, getCurrentUser, router, user]);
-
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [roomsData, reservationsData, usersData] = await Promise.all([
+          roomService.getRooms(),
+          reservationService.getReservations(),
+          userService.getAllUsers(),
+        ]);
+        setRooms(roomsData);
+        setReservations(reservationsData);
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
   if (!isAuthenticated || !user || user.role !== 'ADMIN') {
     return <div>Loading...</div>;
   }
@@ -35,7 +58,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNavbar />
-      
+
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
@@ -49,7 +72,7 @@ export default function AdminPage() {
                 <Users className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Users</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{users.length}</p>
                 </div>
               </div>
             </div>
@@ -59,7 +82,7 @@ export default function AdminPage() {
                 <Building2 className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Rooms</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{rooms.length}</p>
                 </div>
               </div>
             </div>
@@ -69,7 +92,7 @@ export default function AdminPage() {
                 <CalendarDays className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Reservations</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{reservations.length}</p>
                 </div>
               </div>
             </div>
@@ -79,7 +102,7 @@ export default function AdminPage() {
                 <AlertTriangle className="h-8 w-8 text-red-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Pending Approvals</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-2xl font-semibold text-gray-900">{reservations.filter(r => r.status === 'PENDING').length}</p>
                 </div>
               </div>
             </div>
@@ -123,6 +146,7 @@ export default function AdminPage() {
               </div>
             </div>
 
+            {/*  depois ve como fazer isso aqui
             <div className="card">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Recent Activity
@@ -141,7 +165,7 @@ export default function AdminPage() {
                   <span className="text-gray-600">New room added: Meeting Room 3</span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Charts Section */}
@@ -153,15 +177,15 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Confirmed</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{reservations.filter(r => r.status === 'CONFIRMED').length}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Pending</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{reservations.filter(r => r.status === 'PENDING').length}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Cancelled</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{reservations.filter(r => r.status === 'CANCELLED').length}</span>
                 </div>
               </div>
             </div>
@@ -173,15 +197,15 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Active Users</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{users.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Available Rooms</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{rooms.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Today&apos;s Reservations</span>
-                  <span className="text-sm font-medium">0</span>
+                  <span className="text-sm font-medium">{reservations.filter(r => new Date(r.startTime).toDateString() === new Date().toDateString()).length}</span>
                 </div>
               </div>
             </div>

@@ -18,7 +18,7 @@ export function LoginForm() {
       await login(username, password);
       router.push('/dashboard');
     } catch (error) {
-      // Error is handled by the store
+      // handled by store
     }
   };
 
@@ -73,7 +73,7 @@ export function LoginForm() {
           {error && (
             <div className="text-red-600 text-sm text-center">{error}</div>
           )}
-
+         
           <div>
             <button
               type="submit"
@@ -82,6 +82,15 @@ export function LoginForm() {
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
+          </div>
+
+          <div className="text-center mt-4">
+            <a
+              href="/forgot-password"
+              className="text-sm text-blue-600 hover:text-blue-500"
+            >
+              Forgot your password?
+            </a>
           </div>
         </form>
       </div>

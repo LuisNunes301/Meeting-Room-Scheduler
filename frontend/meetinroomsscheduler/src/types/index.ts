@@ -1,6 +1,7 @@
 export interface User {
   id: number;
   username: string;
+  password?: string;
   name: string;
   email: string;
   role: 'ADMIN' | 'USER';
@@ -51,11 +52,24 @@ export interface SignUpRequest {
   name: string;
   email: string;
 }
-
+export interface UserResponse {
+  message: string;
+}
 export interface AuthResponse {
   message: string;
 }
+export interface UpdateUserRequest {
+  name: string;
+  username: string;
+  email: string;
+  role?: 'ADMIN' | 'USER'; // opcional para permitir que admin altere
+}
 
+export interface UpdateCurrentUserRequest {
+  name: string;
+  username: string;
+  email: string;
+}
 export interface ApiError {
   message: string;
   status: number;

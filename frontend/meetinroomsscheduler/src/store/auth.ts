@@ -7,31 +7,36 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  isAuthResolved: boolean;
 }
 
 interface AuthActions {
   login: (username: string, password: string) => Promise<void>;
   signup: (userData: { username: string; password: string; name: string; email: string }) => Promise<void>;
   logout: () => Promise<void>;
-  getCurrentUser: () => Promise<void>;
+  getCurrentUser: () => Promise<User | null>;
   clearError: () => void;
   setUser: (user: User | null) => void;
 }
 
-export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
+export const useAuthStore = create<AuthState & AuthActions>((set) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
-
-  login: async (username: string, password: string) => {
+ isAuthResolved: false,
+  login: async (username, password) => {
     set({ isLoading: true, error: null });
     try {
       await authService.login({ username, password });
-      await get().getCurrentUser();
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Login failed';
-      set({ error: errorMessage });
+      const user = await authService.getCurrentUser();
+      set({ user, isAuthenticated: true });
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Login failed',
+        user: null,
+        isAuthenticated: false
+      });
     } finally {
       set({ isLoading: false });
     }
@@ -41,10 +46,14 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await authService.signup(userData);
-      await get().getCurrentUser();
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Signup failed';
-      set({ error: errorMessage });
+      const user = await authService.getCurrentUser();
+      set({ user, isAuthenticated: true });
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Signup failed',
+        user: null,
+        isAuthenticated: false
+      });
     } finally {
       set({ isLoading: false });
     }
@@ -55,7 +64,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     try {
       await authService.logout();
       set({ user: null, isAuthenticated: false });
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('Logout error:', error);
     } finally {
       set({ isLoading: false });
@@ -65,9 +74,11 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   getCurrentUser: async () => {
     try {
       const user = await authService.getCurrentUser();
-      set({ user, isAuthenticated: true });
-    } catch (error: unknown) {
-      set({ user: null, isAuthenticated: false });
+      set({ user, isAuthenticated: true, isAuthResolved: true });
+      return user;
+    } catch (error) {
+      set({ user: null, isAuthenticated: false, isAuthResolved: true });
+      return null;
     }
   },
 
