@@ -190,7 +190,7 @@ export default function AdminReservationsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(reservation.createdAt).toLocaleDateString()}
+                        {reservation.createdAt}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">

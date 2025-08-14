@@ -1,7 +1,8 @@
 import api from '@/lib/api';
-import { Reservation, CreateReservationRequest } from '@/types';
+import { Reservation, CreateReservationRequest, UpdateReservationRequest  } from '@/types';
 
 export const reservationService = {
+
   async getReservations(params?: {
     roomId?: number;
     status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
@@ -10,8 +11,20 @@ export const reservationService = {
     return response.data;
   },
 
+
   async createReservation(data: CreateReservationRequest): Promise<Reservation> {
     const response = await api.post<Reservation>('/api/reservations', data);
+    return response.data;
+  },
+
+
+   async updateReservationAdmin(id: number, data: UpdateReservationRequest): Promise<Reservation> {
+    const response = await api.put<Reservation>(`/api/reservations/admin/${id}`, data);
+    return response.data;
+  },
+
+  async updateReservationUser(id: number, data: UpdateReservationRequest): Promise<Reservation> {
+    const response = await api.put<Reservation>(`/api/reservations/user/${id}`, data);
     return response.data;
   },
 
@@ -38,5 +51,5 @@ export const reservationService = {
   async deleteReservation(id: number): Promise<Reservation> {
     const response = await api.delete<Reservation>(`/api/reservations/${id}`);
     return response.data;
-  },
+  }
 };

@@ -37,8 +37,11 @@ export interface CreateReservationRequest {
   endTime: string;
 }
 
-export interface UpdateReservationStatusRequest {
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+export interface UpdateReservationRequest {
+  roomId?: number;
+  startTime?: string;
+  endTime?: string;
+  status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 }
 
 export interface LoginRequest {

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Room } from '@/types';
 import { roomService } from '@/services/rooms';
 import { Navbar } from '@/components/layout/navbar';
+import { reservationService } from '@/services/reservations';
 
 export default function RoomPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -11,9 +12,10 @@ export default function RoomPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+        
         const data = await roomService.getRooms();
         console.log("to aqui", data);
         setRooms(data);
@@ -24,8 +26,26 @@ export default function RoomPage() {
       }
     };
 
-    fetchRooms();
+    fetchData();
   }, []);
+// fazer um modal na hora de criar a reserva para que a pessoa escolha qual data de inicio ao fim, verificar o metodo post do reservation, e depois conferir
+  const handleCreateReservation = async (roomId: number) => {
+    try {
+      const reservationData = {
+        roomId,
+        startTime: new Date().toISOString(),
+        endTime: new Date(new Date().getTime() + 60 * 60 * 1000).toISOString(), // Default to 1 hour
+      };
+
+      const reservation = await reservationService.createReservation(reservationData);
+      console.log('Reservation created:', reservation);
+      alert('Reservation created successfully!');
+    } catch (err) {
+      console.error('Error creating reservation:', err);
+      alert('Failed to create reservation. Please try again.');
+    }
+  }
+
 
   if (loading) {
     return (
@@ -99,6 +119,19 @@ export default function RoomPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                     </svg>
                     Capacity: {room.capacity} people
+                  </div>
+                  <div className="flex items-center">
+
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    Pricing: {(room.price ?? 0) > 0 ? (
+                    <span className="ml-2 text-sm text-gray-500">
+                      {room.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} per hour
+                    </span>
+                    ) : (
+                      <span className="ml-2 text-sm text-gray-500">Free</span>
+                    )} 
                   </div>
                 </div>
                 

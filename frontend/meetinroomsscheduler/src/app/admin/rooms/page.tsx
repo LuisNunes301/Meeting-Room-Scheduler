@@ -225,7 +225,8 @@ export default function AdminRoomsPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Created:</span>
                     <span className="text-gray-900">
-                      {new Date(room.createdAt).toLocaleDateString()}
+                         {room.createdAt.split(" ")[0]}
+
                     </span>
                   </div>
                 </div>
