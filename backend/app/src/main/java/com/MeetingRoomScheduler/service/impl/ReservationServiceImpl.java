@@ -2,13 +2,19 @@ package com.MeetingRoomScheduler.service.impl;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 import com.MeetingRoomScheduler.dto.event.ReservationStatusUpdatedEvent;
+import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
+import com.MeetingRoomScheduler.dto.request.UpdateReservationRequest;
 import com.MeetingRoomScheduler.entities.Reservation.Reservation;
+import com.MeetingRoomScheduler.entities.Reservation.ReservationDto;
 import com.MeetingRoomScheduler.entities.Reservation.ReservationStatus;
+import com.MeetingRoomScheduler.entities.room.Room;
 import com.MeetingRoomScheduler.execptions.ReservationNotFoundException;
 import com.MeetingRoomScheduler.rabbit.reservation.publisher.ReservationCreatedPublisher;
 import com.MeetingRoomScheduler.rabbit.reservation.publisher.ReservationStatusUpdatedPublisher;
 import com.MeetingRoomScheduler.repository.ReservationRepository;
 import com.MeetingRoomScheduler.service.ReservationService;
+import com.MeetingRoomScheduler.service.RoomService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +27,7 @@ import java.util.List;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final RoomService roomService;
     private final ReservationCreatedPublisher reservationCreatedPublisher;
     private final ReservationStatusUpdatedPublisher reservationStatusUpdatedPublisher;
 
@@ -32,28 +39,21 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Reservation> getReservationsByRoomId(Long roomId) {
-        return reservationRepository.findByRoomId(roomId);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Reservation> getReservationsByUserId(Long userId) {
         return reservationRepository.findByUserId(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Reservation> getReservationsByStatus(ReservationStatus status) {
-        return reservationRepository.findByStatus(status);
+    public List<Reservation> getReservationsByFilters(Long roomId, ReservationStatus status) {
+        return reservationRepository.findAll().stream()
+                .filter(r -> roomId == null || r.getRoom().getId().equals(roomId))
+                .filter(r -> status == null || r.getStatus().equals(status))
+                .toList();
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Reservation> getReservationsByRoomAndStatus(Long roomId, ReservationStatus status) {
-        return reservationRepository.findByRoomIdAndStatus(roomId, status);
-    }
-
+    @Transactional
     public Reservation saveReservation(Reservation reservation) {
         boolean hasConflict = reservationRepository.existsByRoomIdAndTimeOverlap(
                 reservation.getRoom().getId(),
@@ -66,8 +66,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         Reservation saved = reservationRepository.save(reservation);
-        ReservationCreatedEvent event = toReservationCreatedEvent(saved);
-        reservationCreatedPublisher.publish(event);
+        reservationCreatedPublisher.publish(toReservationCreatedEvent(saved));
 
         return saved;
     }
@@ -87,28 +86,27 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public void cancelReservation(Reservation reservation) {
+    public Reservation cancelReservation(Reservation reservation) {
         reservation.setStatus(ReservationStatus.CANCELLED);
-        reservationRepository.save(reservation);
+        return reservationRepository.save(reservation);
     }
 
     @Override
     @Transactional
-    public void confirmReservation(Reservation reservation) {
+    public Reservation confirmReservation(Reservation reservation) {
         reservation.setStatus(ReservationStatus.CONFIRMED);
-        reservationRepository.save(reservation);
+        return reservationRepository.save(reservation);
     }
 
     @Override
     @Transactional
-    public void releaseReservationSlot(Reservation reservation) {
+    public Reservation releaseReservationSlot(Reservation reservation) {
         reservation.setStatus(ReservationStatus.PENDING);
-        reservationRepository.save(reservation);
-        System.out.println("Slot released: " + reservation.getRoom().getName()
-                + " from " + reservation.getStartTime() + " to " + reservation.getEndTime());
+        return reservationRepository.save(reservation);
     }
 
     @Override
+    @Transactional
     public Reservation updateReservationStatus(Long id, ReservationStatus newStatus) {
         Reservation reservation = validateAndGetReservation(id);
 
@@ -118,7 +116,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         ReservationStatus oldStatus = reservation.getStatus();
 
-        // Handle status transitions
         if (newStatus == ReservationStatus.CANCELLED) {
             cancelReservation(reservation);
         } else if (reservation.getStatus() == ReservationStatus.PENDING && newStatus == ReservationStatus.CONFIRMED) {
@@ -129,19 +126,37 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation updated = reservationRepository.save(reservation);
 
-        ReservationStatusUpdatedEvent event = new ReservationStatusUpdatedEvent(
+        reservationStatusUpdatedPublisher.publish(new ReservationStatusUpdatedEvent(
                 updated.getId(),
                 updated.getUser().getEmail(),
                 updated.getRoom().getName(),
                 oldStatus,
                 newStatus,
-                LocalDateTime.now());
-
-        reservationStatusUpdatedPublisher.publish(event);
+                LocalDateTime.now()));
 
         return updated;
     }
 
+    @Override
+    public Reservation updateReservationAsAdmin(Long id, UpdateReservationRequest request) {
+        Reservation reservation = validateAndGetReservation(id);
+        applyChanges(reservation, request);
+        return reservationRepository.save(reservation);
+    }
+
+    @Override
+    public Reservation updateReservationAsUser(Long id, UpdateReservationRequest request, String username) {
+        Reservation reservation = validateAndGetReservation(id);
+
+        if (!reservation.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("You cannot update another user's reservation");
+        }
+
+        applyChanges(reservation, request);
+        return reservationRepository.save(reservation);
+    }
+
+    @Override
     public ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation) {
         return new ReservationCreatedEvent(
                 reservation.getUser().getName(),
@@ -153,4 +168,17 @@ public class ReservationServiceImpl implements ReservationService {
                 "admin@sistema.com");
     }
 
+    private void applyChanges(Reservation reservation, UpdateReservationRequest request) {
+        reservation.setStartTime(request.startTime());
+        reservation.setEndTime(request.endTime());
+
+        if (request.roomId() != null) {
+            Room room = roomService.getRoomById(request.roomId());
+            reservation.setRoom(room);
+        }
+
+        if (request.status() != null) {
+            reservation.setStatus(request.status());
+        }
+    }
 }

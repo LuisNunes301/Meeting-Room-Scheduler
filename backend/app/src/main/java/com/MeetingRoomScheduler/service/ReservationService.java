@@ -3,34 +3,41 @@ package com.MeetingRoomScheduler.service;
 import java.util.List;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
+import com.MeetingRoomScheduler.dto.request.UpdateReservationRequest;
 import com.MeetingRoomScheduler.entities.Reservation.Reservation;
+import com.MeetingRoomScheduler.entities.Reservation.ReservationDto;
 import com.MeetingRoomScheduler.entities.Reservation.ReservationStatus;
 
 public interface ReservationService {
 
     List<Reservation> getAllReservations();
 
-    List<Reservation> getReservationsByRoomId(Long roomId);
-
     List<Reservation> getReservationsByUserId(Long userId);
 
-    List<Reservation> getReservationsByStatus(ReservationStatus status);
+    List<Reservation> getReservationsByFilters(Long roomId, ReservationStatus status);
 
-    List<Reservation> getReservationsByRoomAndStatus(Long roomId, ReservationStatus status);
-
+    // Criação e persistência
     Reservation saveReservation(Reservation reservation);
 
     void deleteReservation(Reservation reservation);
 
+    // Validação
     Reservation validateAndGetReservation(Long id);
 
-    ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation);
+    // Atualizações de status
+    Reservation cancelReservation(Reservation reservation);
+
+    Reservation confirmReservation(Reservation reservation);
+
+    Reservation releaseReservationSlot(Reservation reservation);
 
     Reservation updateReservationStatus(Long id, ReservationStatus newStatus);
 
-    void releaseReservationSlot(Reservation reservation);
+    // Atualizações via request
+    Reservation updateReservationAsAdmin(Long id, UpdateReservationRequest request);
 
-    void cancelReservation(Reservation reservation);
+    Reservation updateReservationAsUser(Long id, UpdateReservationRequest request, String username);
 
-    void confirmReservation(Reservation reservation);
+    // Eventos
+    ReservationCreatedEvent toReservationCreatedEvent(Reservation reservation);
 }
