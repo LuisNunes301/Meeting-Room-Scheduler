@@ -2,9 +2,7 @@ package com.MeetingRoomScheduler.controller;
 
 import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
 import com.MeetingRoomScheduler.dto.request.UpdateReservationRequest;
-import com.MeetingRoomScheduler.dto.request.UpdateReservationStatusRequest;
 import com.MeetingRoomScheduler.entities.Reservation.*;
-import com.MeetingRoomScheduler.entities.room.Room;
 import com.MeetingRoomScheduler.entities.user.CustomUserDetails;
 import com.MeetingRoomScheduler.entities.user.User;
 import com.MeetingRoomScheduler.service.ReservationService;

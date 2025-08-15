@@ -2,8 +2,6 @@ package com.MeetingRoomScheduler.entities.room;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public record RoomDto(
         Long id,
         String name,
@@ -12,8 +10,8 @@ public record RoomDto(
         Boolean available,
         String description,
         String equipment,
-        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime createdAt,
-        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime updatedAt, Double price) {
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt, Double price) {
     public static RoomDto from(Room room) {
         return new RoomDto(
                 room.getId(),

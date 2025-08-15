@@ -1,6 +1,6 @@
 package com.MeetingRoomScheduler.dto.event;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +14,8 @@ public class ReservationCreatedEvent {
     private String userEmail;
     private String roomName;
     private String roomLocation;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private OffsetDateTime startTime;
+    private OffsetDateTime endTime;
     private String adminEmail;
 
 }

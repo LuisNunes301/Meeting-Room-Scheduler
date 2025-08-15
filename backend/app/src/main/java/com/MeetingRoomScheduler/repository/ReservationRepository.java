@@ -1,6 +1,6 @@
 package com.MeetingRoomScheduler.repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,6 +31,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
       """)
   boolean existsByRoomIdAndTimeOverlap(
       @Param("roomId") Long roomId,
-      @Param("startTime") LocalDateTime startTime,
-      @Param("endTime") LocalDateTime endTime);
+      @Param("startTime") OffsetDateTime startTime,
+      @Param("endTime") OffsetDateTime endTime);
 }

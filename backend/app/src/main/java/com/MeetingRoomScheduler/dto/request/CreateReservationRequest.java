@@ -1,11 +1,12 @@
 package com.MeetingRoomScheduler.dto.request;
 
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 
 public record CreateReservationRequest(
         @NotNull Long roomId,
-        @Future @NotNull LocalDateTime startTime,
-        @Future @NotNull LocalDateTime endTime) {
+        @FutureOrPresent @NotNull OffsetDateTime startTime,
+        @FutureOrPresent @NotNull OffsetDateTime endTime) {
 }

@@ -2,10 +2,8 @@ package com.MeetingRoomScheduler.service.impl;
 
 import com.MeetingRoomScheduler.dto.event.ReservationCreatedEvent;
 import com.MeetingRoomScheduler.dto.event.ReservationStatusUpdatedEvent;
-import com.MeetingRoomScheduler.dto.request.CreateReservationRequest;
 import com.MeetingRoomScheduler.dto.request.UpdateReservationRequest;
 import com.MeetingRoomScheduler.entities.Reservation.Reservation;
-import com.MeetingRoomScheduler.entities.Reservation.ReservationDto;
 import com.MeetingRoomScheduler.entities.Reservation.ReservationStatus;
 import com.MeetingRoomScheduler.entities.room.Room;
 import com.MeetingRoomScheduler.execptions.ReservationNotFoundException;
