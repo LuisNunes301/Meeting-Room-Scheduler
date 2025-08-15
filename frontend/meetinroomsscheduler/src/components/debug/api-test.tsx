@@ -10,15 +10,15 @@ export function ApiTest() {
   const testSignup = async () => {
     setLoading(true);
     setResult('');
-    
+
     try {
       const testData = {
         username: 'testuser',
         password: 'testpass123',
         name: 'Test User',
-        email: 'test@example.com'
+        email: 'test@example.com',
       };
-      
+
       console.log('Testing signup with data:', testData);
       const response = await authService.signup(testData);
       setResult(`Success: ${JSON.stringify(response, null, 2)}`);
@@ -33,13 +33,13 @@ export function ApiTest() {
   const testLogin = async () => {
     setLoading(true);
     setResult('');
-    
+
     try {
       const testData = {
         username: 'testuser',
-        password: 'testpass123'
+        password: 'testpass123',
       };
-      
+
       console.log('Testing login with data:', testData);
       const response = await authService.login(testData);
       setResult(`Success: ${JSON.stringify(response, null, 2)}`);
@@ -54,7 +54,7 @@ export function ApiTest() {
   return (
     <div className="p-4 border rounded-lg bg-gray-50">
       <h3 className="text-lg font-semibold mb-4">API Test Component</h3>
-      
+
       <div className="space-y-2 mb-4">
         <button
           onClick={testSignup}
@@ -63,7 +63,7 @@ export function ApiTest() {
         >
           {loading ? 'Testing...' : 'Test Signup'}
         </button>
-        
+
         <button
           onClick={testLogin}
           disabled={loading}
@@ -72,13 +72,11 @@ export function ApiTest() {
           {loading ? 'Testing...' : 'Test Login'}
         </button>
       </div>
-      
+
       {result && (
         <div className="mt-4">
           <h4 className="font-medium mb-2">Result:</h4>
-          <pre className="bg-white p-2 rounded border text-sm overflow-auto">
-            {result}
-          </pre>
+          <pre className="bg-white p-2 rounded border text-sm overflow-auto">{result}</pre>
         </div>
       )}
     </div>

@@ -36,7 +36,7 @@ export default function AdminUsersPage() {
     const fetchUsers = async () => {
       try {
         const data = await adminService.getAllUsers();
-        const ids = data.map(user => user.id);
+        const ids = data.map((user) => user.id);
         const uniqueIds = new Set(ids);
         if (ids.length !== uniqueIds.size) {
           console.error('Duplicate user IDs found!');
@@ -59,7 +59,13 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleCreateUser = async (data: { username: string; name: string; email: string; password?: string; role: 'ADMIN' | 'USER' }) => {
+  const handleCreateUser = async (data: {
+    username: string;
+    name: string;
+    email: string;
+    password?: string;
+    role: 'ADMIN' | 'USER';
+  }) => {
     try {
       const newUser = await adminService.createUser(data);
       setUsers((prev) => [...prev, newUser]);
@@ -77,10 +83,11 @@ export default function AdminUsersPage() {
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    (user.name?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
-    (user.email?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
-    (user.username?.toLowerCase() ?? '').includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      (user.name?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+      (user.email?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+      (user.username?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()),
   );
 
   if (!isAuthenticated || !user || user.role !== 'ADMIN') {
@@ -94,10 +101,11 @@ export default function AdminUsersPage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">
-              User Management
-            </h1>
-            <button className="btn-primary flex items-center" onClick={() => setShowCreateUser(true)}>
+            <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
+            <button
+              className="btn-primary flex items-center"
+              onClick={() => setShowCreateUser(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add User
             </button>
@@ -151,12 +159,8 @@ export default function AdminUsersPage() {
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {user.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              @{user.username}
-                            </div>
+                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                            <div className="text-sm text-gray-500">@{user.username}</div>
                           </div>
                         </div>
                       </td>
@@ -164,10 +168,13 @@ export default function AdminUsersPage() {
                         {user.email}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'ADMIN'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-green-100 text-green-800'
-                          }`}>
+                        <span
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            user.role === 'ADMIN'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
+                          }`}
+                        >
                           {user.role}
                         </span>
                       </td>
@@ -204,16 +211,13 @@ export default function AdminUsersPage() {
           {filteredUsers.length > 0 && (
             <div className="mt-6 flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredUsers.length}</span> of{' '}
+                Showing <span className="font-medium">1</span> to{' '}
+                <span className="font-medium">{filteredUsers.length}</span> of{' '}
                 <span className="font-medium">{users.length}</span> results
               </div>
               <div className="flex space-x-2">
-                <button className="btn-secondary px-3 py-2 text-sm">
-                  Previous
-                </button>
-                <button className="btn-secondary px-3 py-2 text-sm">
-                  Next
-                </button>
+                <button className="btn-secondary px-3 py-2 text-sm">Previous</button>
+                <button className="btn-secondary px-3 py-2 text-sm">Next</button>
               </div>
             </div>
           )}

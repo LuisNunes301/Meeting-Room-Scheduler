@@ -13,7 +13,7 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
-    
+
     try {
       await login(username, password);
       router.push('/dashboard');
@@ -70,25 +70,16 @@ export function LoginForm() {
             </div>
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
-         
+          {error && <div className="text-red-600 text-sm text-center">{error}</div>}
+
           <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn-primary w-full"
-            >
+            <button type="submit" disabled={isLoading} className="btn-primary w-full">
               {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
 
           <div className="text-center mt-4">
-            <a
-              href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-500"
-            >
+            <a href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
               Forgot your password?
             </a>
           </div>

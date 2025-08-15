@@ -27,7 +27,7 @@ export function RoomModal({ mode, room, onClose, onSubmit }: RoomModalProps) {
     available: true,
     description: '',
     equipment: '',
-    price: 0
+    price: 0,
   });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function RoomModal({ mode, room, onClose, onSubmit }: RoomModalProps) {
         available: room.available,
         description: room.description || '',
         equipment: room.equipment || '',
-        price: room.price || 0
+        price: room.price || 0,
       });
     }
   }, [room, mode]);
@@ -53,22 +53,22 @@ export function RoomModal({ mode, room, onClose, onSubmit }: RoomModalProps) {
       available: formData.available,
       description: formData.description || undefined,
       equipment: formData.equipment || undefined,
-      price: formData.price || undefined
+      price: formData.price || undefined,
     });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value
+      [name]: type === 'number' ? Number(value) : value,
     }));
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.checked
+      [e.target.name]: e.target.checked,
     }));
   };
 
@@ -79,10 +79,7 @@ export function RoomModal({ mode, room, onClose, onSubmit }: RoomModalProps) {
           <h2 className="text-xl font-semibold text-gray-900">
             {mode === 'create' ? 'Create New Room' : 'Edit Room'}
           </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -199,17 +196,10 @@ export function RoomModal({ mode, room, onClose, onSubmit }: RoomModalProps) {
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn-secondary"
-            >
+            <button type="button" onClick={onClose} className="btn-secondary">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="btn-primary"
-            >
+            <button type="submit" className="btn-primary">
               {mode === 'create' ? 'Create Room' : 'Update Room'}
             </button>
           </div>

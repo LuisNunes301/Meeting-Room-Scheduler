@@ -46,12 +46,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Welcome back, {user.name}!
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Welcome back, {user.name}!</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="card">
@@ -69,7 +67,9 @@ export default function DashboardPage() {
                 <Building2 className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Available Rooms</p>
-                  <p className="text-2xl font-semibold text-gray-900">{rooms.filter(room => room.available).length}</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {rooms.filter((room) => room.available).length}
+                  </p>
                 </div>
               </div>
             </div>
@@ -79,7 +79,9 @@ export default function DashboardPage() {
                 <Clock className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Pending</p>
-                  <p className="text-2xl font-semibold text-gray-900">{reservations.filter(reservation => reservation.status === 'PENDING').length}</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {reservations.filter((reservation) => reservation.status === 'PENDING').length}
+                  </p>
                 </div>
               </div>
             </div>
@@ -89,7 +91,12 @@ export default function DashboardPage() {
                 <CheckCircle className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                  <p className="text-2xl font-semibold text-gray-900">{reservations.filter(reservation => reservation.status === 'CONFIRMED').length}</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {
+                      reservations.filter((reservation) => reservation.status === 'CONFIRMED')
+                        .length
+                    }
+                  </p>
                 </div>
               </div>
             </div>
@@ -97,35 +104,22 @@ export default function DashboardPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="card">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Quick Actions
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
               <div className="space-y-3">
-                <a
-                  href="/reservation"
-                  className="btn-primary block text-center"
-                >
+                <a href="/reservation" className="btn-primary block text-center">
                   Book a Room
                 </a>
-                <a
-                  href="/reservation"
-                  className="btn-secondary block text-center"
-                >
+                <a href="/reservation" className="btn-secondary block text-center">
                   View My Reservations
                 </a>
-                <a
-                  href="/room"
-                  className="btn-secondary block text-center"
-                >
+                <a href="/room" className="btn-secondary block text-center">
                   Browse Available Rooms
                 </a>
               </div>
             </div>
 
             <div className="card">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Recent Activity
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
               <div className="text-gray-600 text-sm">
                 <p>No recent activity</p>
               </div>

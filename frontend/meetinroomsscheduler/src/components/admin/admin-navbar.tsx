@@ -1,11 +1,7 @@
 'use client';
 
 import { useAuthStore } from '@/store/auth';
-import { 
-  LogOut, 
-  User,
-  Shield
-} from 'lucide-react';
+import { LogOut, User, Shield } from 'lucide-react';
 
 export function AdminNavbar() {
   const { user, logout } = useAuthStore();
@@ -22,9 +18,7 @@ export function AdminNavbar() {
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <Shield className="h-8 w-8 text-red-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Admin Panel
-              </span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Admin Panel</span>
             </div>
           </div>
 
@@ -59,7 +53,7 @@ export function AdminNavbar() {
             >
               Settings
             </a>
-            
+
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
                 <User className="h-4 w-4 text-gray-500" />

@@ -18,9 +18,7 @@ export function Navbar() {
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <CalendarDays className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Meeting Scheduler
-              </span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Meeting Scheduler</span>
             </div>
           </div>
 
@@ -51,7 +49,7 @@ export function Navbar() {
                 Admin Panel
               </a>
             )}
-            
+
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
                 <User className="h-4 w-4 text-gray-500" />

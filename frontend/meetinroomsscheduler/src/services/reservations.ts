@@ -1,8 +1,7 @@
 import api from '@/lib/api';
-import { Reservation, CreateReservationRequest, UpdateReservationRequest  } from '@/types';
+import { Reservation, CreateReservationRequest, UpdateReservationRequest } from '@/types';
 
 export const reservationService = {
-
   async getReservations(params?: {
     roomId?: number;
     status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
@@ -11,14 +10,12 @@ export const reservationService = {
     return response.data;
   },
 
-
   async createReservation(data: CreateReservationRequest): Promise<Reservation> {
     const response = await api.post<Reservation>('/api/reservations', data);
     return response.data;
   },
 
-
-   async updateReservationAdmin(id: number, data: UpdateReservationRequest): Promise<Reservation> {
+  async updateReservationAdmin(id: number, data: UpdateReservationRequest): Promise<Reservation> {
     const response = await api.put<Reservation>(`/api/reservations/admin/${id}`, data);
     return response.data;
   },
@@ -28,7 +25,10 @@ export const reservationService = {
     return response.data;
   },
 
-  async updateReservationStatus(id: number, status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'): Promise<Reservation> {
+  async updateReservationStatus(
+    id: number,
+    status: 'PENDING' | 'CONFIRMED' | 'CANCELLED',
+  ): Promise<Reservation> {
     const response = await api.put<Reservation>(`/api/reservations/${id}/status`, { status });
     return response.data;
   },
@@ -51,5 +51,5 @@ export const reservationService = {
   async deleteReservation(id: number): Promise<Reservation> {
     const response = await api.delete<Reservation>(`/api/reservations/${id}`);
     return response.data;
-  }
+  },
 };

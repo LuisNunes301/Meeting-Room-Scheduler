@@ -62,7 +62,10 @@ export const adminService = {
     return response.data;
   },
 
-  async updateReservationStatus(id: number, status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'): Promise<Reservation> {
+  async updateReservationStatus(
+    id: number,
+    status: 'PENDING' | 'CONFIRMED' | 'CANCELLED',
+  ): Promise<Reservation> {
     const response = await api.put<Reservation>(`/api/reservations/${id}/status`, { status });
     return response.data;
   },

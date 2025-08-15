@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { User } from "@/types";
+import { User } from '@/types';
 
 interface UserModalProps {
   mode: 'create' | 'edit';
@@ -12,7 +12,7 @@ interface UserModalProps {
     password?: string;
     name: string;
     email: string;
-    role: "ADMIN" | "USER";
+    role: 'ADMIN' | 'USER';
   }) => Promise<void> | void;
 }
 
@@ -20,18 +20,18 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
-    username: "",
-    password: "",
-    name: "",
-    email: "",
-    role: "USER" as "ADMIN" | "USER",
+    username: '',
+    password: '',
+    name: '',
+    email: '',
+    role: 'USER' as 'ADMIN' | 'USER',
   });
 
   useEffect(() => {
-    if (user && mode === "edit") {
+    if (user && mode === 'edit') {
       setForm({
         username: user.username,
-        password: "", // senha em branco para não exibir
+        password: '', // senha em branco para não exibir
         name: user.name,
         email: user.email,
         role: user.role,
@@ -48,8 +48,8 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
     e.preventDefault();
     setError(null);
 
-    if (!form.username || !form.name || !form.email || (mode === "create" && !form.password)) {
-      setError("Please fill in all required fields.");
+    if (!form.username || !form.name || !form.email || (mode === 'create' && !form.password)) {
+      setError('Please fill in all required fields.');
       return;
     }
 
@@ -64,7 +64,7 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
       });
       onClose();
     } catch (err) {
-      setError("Failed to save user.");
+      setError('Failed to save user.');
     } finally {
       setLoading(false);
     }
@@ -81,12 +81,9 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
       >
         <div className="flex items-center mb-4">
           <h3 className="text-lg font-medium text-gray-900">
-            {mode === "create" ? "Create User" : "Edit User"}
+            {mode === 'create' ? 'Create User' : 'Edit User'}
           </h3>
-          <button
-            onClick={onClose}
-            className="ml-auto text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="ml-auto text-gray-400 hover:text-gray-600">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -111,17 +108,15 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">
-              Password {mode === "create" && "*"}
-            </label>
+            <label className="block text-sm font-medium">Password {mode === 'create' && '*'}</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               className="input-field"
-              placeholder={mode === "edit" ? "Leave blank to keep current password" : ""}
-              required={mode === "create"}
+              placeholder={mode === 'edit' ? 'Leave blank to keep current password' : ''}
+              required={mode === 'create'}
             />
           </div>
 
@@ -169,7 +164,7 @@ export function UserModal({ mode, user, onClose, onSubmit }: UserModalProps) {
               disabled={loading}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

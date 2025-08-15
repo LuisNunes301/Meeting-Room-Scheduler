@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { AdminNavbar } from '@/components/admin/admin-navbar';
-import { 
-  CalendarDays, 
-  Search, 
-  Filter, 
-  CheckCircle, 
-  Clock, 
+import {
+  CalendarDays,
+  Search,
+  Filter,
+  CheckCircle,
+  Clock,
   XCircle,
   User,
   Building2,
-  Eye
+  Eye,
 } from 'lucide-react';
 import { Reservation } from '@/types';
 import { adminService } from '@/services/admin';
@@ -23,8 +23,9 @@ export default function AdminReservationsPage() {
   const router = useRouter();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDING' | 'CONFIRMED' | 'CANCELLED'>('ALL');
-
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDING' | 'CONFIRMED' | 'CANCELLED'>(
+    'ALL',
+  );
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -44,19 +45,18 @@ export default function AdminReservationsPage() {
         setReservations(data);
       } catch (err) {
         console.error('Error fetching reservations:', err);
-      } 
+      }
     };
     fetchReservations();
-
   }, []);
 
-  const filteredReservations = reservations.filter(reservation => {
-    const matchesSearch = 
+  const filteredReservations = reservations.filter((reservation) => {
+    const matchesSearch =
       reservation.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reservation.room.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus = statusFilter === 'ALL' || reservation.status === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
 
@@ -93,13 +93,11 @@ export default function AdminReservationsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNavbar />
-      
+
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">
-              Reservation Management
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900">Reservation Management</h1>
           </div>
 
           {/* Filters */}
@@ -119,7 +117,9 @@ export default function AdminReservationsPage() {
               <select
                 className="input-field"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as 'ALL' | 'PENDING' | 'CONFIRMED' | 'CANCELLED')}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value as 'ALL' | 'PENDING' | 'CONFIRMED' | 'CANCELLED')
+                }
               >
                 <option value="ALL">All Status</option>
                 <option value="PENDING">Pending</option>
@@ -178,13 +178,16 @@ export default function AdminReservationsPage() {
                           {new Date(reservation.startTime).toLocaleDateString()}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {new Date(reservation.startTime).toLocaleTimeString()} - {new Date(reservation.endTime).toLocaleTimeString()}
+                          {new Date(reservation.startTime).toLocaleTimeString()} -{' '}
+                          {new Date(reservation.endTime).toLocaleTimeString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {getStatusIcon(reservation.status)}
-                          <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(reservation.status)}`}>
+                          <span
+                            className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(reservation.status)}`}
+                          >
                             {reservation.status}
                           </span>
                         </div>
@@ -222,7 +225,9 @@ export default function AdminReservationsPage() {
               <CalendarDays className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-2 text-sm font-medium text-gray-900">No reservations found</h3>
               <p className="mt-1 text-sm text-gray-500">
-                {searchTerm || statusFilter !== 'ALL' ? 'Try adjusting your filters.' : 'No reservations have been made yet.'}
+                {searchTerm || statusFilter !== 'ALL'
+                  ? 'Try adjusting your filters.'
+                  : 'No reservations have been made yet.'}
               </p>
             </div>
           )}
@@ -231,16 +236,13 @@ export default function AdminReservationsPage() {
           {filteredReservations.length > 0 && (
             <div className="mt-6 flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredReservations.length}</span> of{' '}
+                Showing <span className="font-medium">1</span> to{' '}
+                <span className="font-medium">{filteredReservations.length}</span> of{' '}
                 <span className="font-medium">{reservations.length}</span> results
               </div>
               <div className="flex space-x-2">
-                <button className="btn-secondary px-3 py-2 text-sm">
-                  Previous
-                </button>
-                <button className="btn-secondary px-3 py-2 text-sm">
-                  Next
-                </button>
+                <button className="btn-secondary px-3 py-2 text-sm">Previous</button>
+                <button className="btn-secondary px-3 py-2 text-sm">Next</button>
               </div>
             </div>
           )}

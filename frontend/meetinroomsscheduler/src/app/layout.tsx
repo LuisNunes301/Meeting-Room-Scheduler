@@ -2,11 +2,7 @@ import React from 'react';
 import { QueryProvider } from '@/providers/query-provider';
 import './globals.css';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -15,9 +11,7 @@ export default function RootLayout({
         <meta name="description" content="Schedule and manage meeting rooms efficiently" />
       </head>
       <body className="bg-gray-50 min-h-screen">
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import {userService} from '@/services/user';
+import { userService } from '@/services/user';
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState('');

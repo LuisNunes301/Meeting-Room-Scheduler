@@ -16,24 +16,27 @@ A modern React/Next.js frontend for the Meeting Room Scheduler application.
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Backend server running on `http://localhost:8080`
 
 ### Installation
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Create environment file:
+
 ```bash
 # Create .env.local file
 echo "NEXT_PUBLIC_API_URL=http://localhost:8080" > .env.local
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```

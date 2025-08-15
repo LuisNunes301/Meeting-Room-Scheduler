@@ -4,15 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { AdminNavbar } from '@/components/admin/admin-navbar';
-import { 
-  Settings, 
-  Bell, 
-  Shield, 
-  Database, 
-  Save,
-  Eye,
-  EyeOff
-} from 'lucide-react';
+import { Settings, Bell, Shield, Database, Save, Eye, EyeOff } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const { user, isAuthenticated, getCurrentUser } = useAuthStore();
@@ -25,7 +17,7 @@ export default function AdminSettingsPage() {
     inactiveTimeout: 30,
     systemMaintenance: false,
     maintenanceMessage: '',
-    showAdminPanel: true
+    showAdminPanel: true,
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,9 +32,9 @@ export default function AdminSettingsPage() {
   }, [isAuthenticated, getCurrentUser, router, user]);
 
   const handleSettingChange = (key: string, value: string | number | boolean) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
@@ -58,17 +50,12 @@ export default function AdminSettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNavbar />
-      
+
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">
-              System Settings
-            </h1>
-            <button 
-              onClick={handleSave}
-              className="btn-primary flex items-center"
-            >
+            <h1 className="text-3xl font-bold text-gray-900">System Settings</h1>
+            <button onClick={handleSave} className="btn-primary flex items-center">
               <Save className="h-4 w-4 mr-2" />
               Save Settings
             </button>
@@ -81,26 +68,28 @@ export default function AdminSettingsPage() {
                 <Settings className="h-5 w-5 mr-2" />
                 General Settings
               </h2>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-sm font-medium text-gray-700">
-                      Email Notifications
-                    </label>
+                    <label className="text-sm font-medium text-gray-700">Email Notifications</label>
                     <p className="text-xs text-gray-500">
                       Send email notifications for reservations
                     </p>
                   </div>
                   <button
-                    onClick={() => handleSettingChange('emailNotifications', !settings.emailNotifications)}
+                    onClick={() =>
+                      handleSettingChange('emailNotifications', !settings.emailNotifications)
+                    }
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       settings.emailNotifications ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      settings.emailNotifications ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.emailNotifications ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </div>
 
@@ -114,14 +103,18 @@ export default function AdminSettingsPage() {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleSettingChange('reservationApproval', !settings.reservationApproval)}
+                    onClick={() =>
+                      handleSettingChange('reservationApproval', !settings.reservationApproval)
+                    }
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       settings.reservationApproval ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      settings.reservationApproval ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.reservationApproval ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </div>
 
@@ -134,7 +127,9 @@ export default function AdminSettingsPage() {
                     min="1"
                     max="24"
                     value={settings.maxReservationDuration}
-                    onChange={(e) => handleSettingChange('maxReservationDuration', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      handleSettingChange('maxReservationDuration', parseInt(e.target.value))
+                    }
                     className="input-field mt-1"
                   />
                 </div>
@@ -147,7 +142,7 @@ export default function AdminSettingsPage() {
                 <Shield className="h-5 w-5 mr-2" />
                 Security Settings
               </h2>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -159,14 +154,18 @@ export default function AdminSettingsPage() {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleSettingChange('autoCancelInactive', !settings.autoCancelInactive)}
+                    onClick={() =>
+                      handleSettingChange('autoCancelInactive', !settings.autoCancelInactive)
+                    }
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       settings.autoCancelInactive ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      settings.autoCancelInactive ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.autoCancelInactive ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </div>
 
@@ -179,15 +178,15 @@ export default function AdminSettingsPage() {
                     min="5"
                     max="120"
                     value={settings.inactiveTimeout}
-                    onChange={(e) => handleSettingChange('inactiveTimeout', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      handleSettingChange('inactiveTimeout', parseInt(e.target.value))
+                    }
                     className="input-field mt-1"
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">
-                    Admin Password
-                  </label>
+                  <label className="text-sm font-medium text-gray-700">Admin Password</label>
                   <div className="relative mt-1">
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -216,7 +215,7 @@ export default function AdminSettingsPage() {
                 <Database className="h-5 w-5 mr-2" />
                 Maintenance Settings
               </h2>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -228,21 +227,23 @@ export default function AdminSettingsPage() {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleSettingChange('systemMaintenance', !settings.systemMaintenance)}
+                    onClick={() =>
+                      handleSettingChange('systemMaintenance', !settings.systemMaintenance)
+                    }
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       settings.systemMaintenance ? 'bg-red-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      settings.systemMaintenance ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.systemMaintenance ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">
-                    Maintenance Message
-                  </label>
+                  <label className="text-sm font-medium text-gray-700">Maintenance Message</label>
                   <textarea
                     value={settings.maintenanceMessage}
                     onChange={(e) => handleSettingChange('maintenanceMessage', e.target.value)}
@@ -260,16 +261,12 @@ export default function AdminSettingsPage() {
                 <Bell className="h-5 w-5 mr-2" />
                 Display Settings
               </h2>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-sm font-medium text-gray-700">
-                      Show Admin Panel
-                    </label>
-                    <p className="text-xs text-gray-500">
-                      Display admin panel in navigation
-                    </p>
+                    <label className="text-sm font-medium text-gray-700">Show Admin Panel</label>
+                    <p className="text-xs text-gray-500">Display admin panel in navigation</p>
                   </div>
                   <button
                     onClick={() => handleSettingChange('showAdminPanel', !settings.showAdminPanel)}
@@ -277,9 +274,11 @@ export default function AdminSettingsPage() {
                       settings.showAdminPanel ? 'bg-blue-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      settings.showAdminPanel ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.showAdminPanel ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </div>
               </div>
@@ -288,9 +287,7 @@ export default function AdminSettingsPage() {
 
           {/* System Information */}
           <div className="mt-6 card">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              System Information
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">System Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div>
                 <span className="text-gray-500">Version:</span>

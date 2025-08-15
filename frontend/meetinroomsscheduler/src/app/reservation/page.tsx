@@ -33,20 +33,21 @@ export default function ReservationPage() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleReservationSubmit = (reservation: Reservation) => {
-    setReservations(prev => [reservation, ...prev]);
+    setReservations((prev) => [reservation, ...prev]);
   };
 
-  const handleStatusChange = async (reservation: Reservation, newStatus: 'CONFIRMED' | 'CANCELLED') => {
+  const handleStatusChange = async (
+    reservation: Reservation,
+    newStatus: 'CONFIRMED' | 'CANCELLED',
+  ) => {
     try {
       const updated = await reservationService.updateReservationUser(reservation.id, {
         startTime: reservation.startTime,
         endTime: reservation.endTime,
         roomId: reservation.room.id,
-        status: newStatus
+        status: newStatus,
       });
-      setReservations(prev =>
-        prev.map(r => r.id === reservation.id ? updated : r)
-      );
+      setReservations((prev) => prev.map((r) => (r.id === reservation.id ? updated : r)));
     } catch (err) {
       console.error('Failed to update reservation status', err);
       setError('Failed to update reservation status');
@@ -55,10 +56,14 @@ export default function ReservationPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'CONFIRMED': return 'bg-green-100 text-green-800';
-      case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-      case 'CANCELLED': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'CONFIRMED':
+        return 'bg-green-100 text-green-800';
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'CANCELLED':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -86,7 +91,7 @@ export default function ReservationPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {reservations.map(reservation => (
+            {reservations.map((reservation) => (
               <div key={reservation.id} className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -95,7 +100,7 @@ export default function ReservationPage() {
                   </div>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                      reservation.status
+                      reservation.status,
                     )}`}
                   >
                     {reservation.status}
@@ -105,11 +110,15 @@ export default function ReservationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-1">Start Time</h4>
-                    <p className="text-sm text-gray-900">{new Date(reservation.startTime).toISOString().slice(0, 16).replace('T', ' ')}</p>
+                    <p className="text-sm text-gray-900">
+                      {new Date(reservation.startTime).toISOString().slice(0, 16).replace('T', ' ')}
+                    </p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-1">End Time</h4>
-                    <p className="text-sm text-gray-900">{new Date(reservation.endTime).toISOString().slice(0, 16).replace('T', ' ')}</p>
+                    <p className="text-sm text-gray-900">
+                      {new Date(reservation.endTime).toISOString().slice(0, 16).replace('T', ' ')}
+                    </p>
                   </div>
                 </div>
 

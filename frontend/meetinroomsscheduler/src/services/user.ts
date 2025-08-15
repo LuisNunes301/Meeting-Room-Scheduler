@@ -1,5 +1,11 @@
 import api from '@/lib/api';
-import { AuthResponse, UpdateCurrentUserRequest, UpdateUserRequest, User, UserResponse } from '@/types';
+import {
+  AuthResponse,
+  UpdateCurrentUserRequest,
+  UpdateUserRequest,
+  User,
+  UserResponse,
+} from '@/types';
 
 export const userService = {
   getAllUsers: async (): Promise<User[]> => {
@@ -17,7 +23,6 @@ export const userService = {
     return response.data;
   },
 
- 
   updateUser: async (id: number, user: UpdateUserRequest): Promise<User> => {
     const response = await api.put<User>(`/api/users/${id}`, user);
     return response.data;

@@ -24,9 +24,7 @@ export default function HomePage() {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <CalendarDays className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Meeting Scheduler
-              </span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Meeting Scheduler</span>
             </div>
             <div className="flex items-center space-x-4">
               <a
@@ -35,10 +33,7 @@ export default function HomePage() {
               >
                 Sign In
               </a>
-              <a
-                href="/signup"
-                className="btn-primary"
-              >
+              <a href="/signup" className="btn-primary">
                 Get Started
               </a>
             </div>
@@ -54,20 +49,14 @@ export default function HomePage() {
             <span className="block text-blue-600">Meeting Room Booking</span>
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-600">
-            Streamline your meeting room reservations with our intuitive scheduling platform. 
-            Book rooms, manage schedules, and coordinate meetings effortlessly.
+            Streamline your meeting room reservations with our intuitive scheduling platform. Book
+            rooms, manage schedules, and coordinate meetings effortlessly.
           </p>
           <div className="mt-10 flex justify-center space-x-4">
-            <a
-              href="/signup"
-              className="btn-primary text-lg px-8 py-3"
-            >
+            <a href="/signup" className="btn-primary text-lg px-8 py-3">
               Start Booking Now
             </a>
-            <a
-              href="/login"
-              className="btn-secondary text-lg px-8 py-3"
-            >
+            <a href="/login" className="btn-secondary text-lg px-8 py-3">
               Sign In
             </a>
           </div>
@@ -90,9 +79,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-4">
               <CalendarDays className="h-12 w-12 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Easy Booking
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Easy Booking</h3>
             <p className="text-gray-600">
               Book meeting rooms with just a few clicks. Simple and intuitive interface.
             </p>
@@ -102,9 +89,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-4">
               <Building2 className="h-12 w-12 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Room Management
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Room Management</h3>
             <p className="text-gray-600">
               View all available rooms and their current status at a glance.
             </p>
@@ -114,9 +99,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-4">
               <Clock className="h-12 w-12 text-yellow-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Real-time Updates
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Real-time Updates</h3>
             <p className="text-gray-600">
               Get instant notifications and updates on your reservations.
             </p>
@@ -126,9 +109,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-4">
               <Users className="h-12 w-12 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Team Collaboration
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Team Collaboration</h3>
             <p className="text-gray-600">
               Coordinate with your team and manage group bookings efficiently.
             </p>
@@ -140,9 +121,7 @@ export default function HomePage() {
       <div className="bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to get started?
-            </h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
             <p className="text-xl text-blue-100 mb-8">
               Join thousands of teams already using our platform
             </p>
@@ -161,9 +140,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <CalendarDays className="h-8 w-8 text-blue-600 mx-auto mb-4" />
-            <p className="text-gray-400">
-              © 2024 Meeting Room Scheduler. All rights reserved.
-            </p>
+            <p className="text-gray-400">© 2024 Meeting Room Scheduler. All rights reserved.</p>
           </div>
         </div>
       </footer>

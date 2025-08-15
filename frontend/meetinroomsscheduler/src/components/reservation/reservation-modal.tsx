@@ -12,7 +12,12 @@ interface ReservationModalProps {
   onSubmit: (data: Reservation) => void;
 }
 
-export const ReservationModal = ({ mode, reservation, onClose, onSubmit }: ReservationModalProps) => {
+export const ReservationModal = ({
+  mode,
+  reservation,
+  onClose,
+  onSubmit,
+}: ReservationModalProps) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<number>(reservation?.room.id || 0);
   const [startTime, setStartTime] = useState<string>(reservation?.startTime || '');
@@ -22,55 +27,64 @@ export const ReservationModal = ({ mode, reservation, onClose, onSubmit }: Reser
 
   // Buscar salas disponíveis
   useEffect(() => {
-    roomService.getRooms()
-      .then(allRooms => setRooms(allRooms.filter(r => r.available)))
+    roomService
+      .getRooms()
+      .then((allRooms) => setRooms(allRooms.filter((r) => r.available)))
       .catch(() => setError('Failed to load rooms'));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!selectedRoomId) return setError('Please select a room');
-  if (!startTime || !endTime) return setError('Start and end time are required');
+    if (!selectedRoomId) return setError('Please select a room');
+    if (!startTime || !endTime) return setError('Start and end time are required');
 
-  const startDate = new Date(startTime);
-  const endDate = new Date(endTime);
+    const startDate = new Date(startTime);
+    const endDate = new Date(endTime);
 
-  if (endDate <= startDate) return setError('End time must be after start time');
+    if (endDate <= startDate) return setError('End time must be after start time');
 
-  setIsSubmitting(true);
-  setError(null);
+    setIsSubmitting(true);
+    setError(null);
 
-  try {
-    let res: Reservation;
+    try {
+      let res: Reservation;
 
-    // Converte datetime-local para formato ISO sem 'Z'
-    const toBackendOffset = (localDateTime: string) => {
-  const date = new Date(localDateTime);
-  return date.toISOString(); // já retorna em formato ISO com 'Z' (UTC)
-};
+      // Converte datetime-local para formato ISO sem 'Z'
+      const toBackendOffset = (localDateTime: string) => {
+        const date = new Date(localDateTime);
+        return date.toISOString(); // já retorna em formato ISO com 'Z' (UTC)
+      };
 
-const startISO = toBackendOffset(startTime);
-const endISO = toBackendOffset(endTime);
+      const startISO = toBackendOffset(startTime);
+      const endISO = toBackendOffset(endTime);
 
-    if (mode === 'create') {
-      const payload: CreateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
-      res = await reservationService.createReservation(payload);
-    } else if (mode === 'edit' && reservation) {
-      const payload: UpdateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
-      res = await reservationService.updateReservationUser(reservation.id, payload);
-    } else {
-      throw new Error('Invalid mode');
+      if (mode === 'create') {
+        const payload: CreateReservationRequest = {
+          roomId: selectedRoomId,
+          startTime: startISO,
+          endTime: endISO,
+        };
+        res = await reservationService.createReservation(payload);
+      } else if (mode === 'edit' && reservation) {
+        const payload: UpdateReservationRequest = {
+          roomId: selectedRoomId,
+          startTime: startISO,
+          endTime: endISO,
+        };
+        res = await reservationService.updateReservationUser(reservation.id, payload);
+      } else {
+        throw new Error('Invalid mode');
+      }
+
+      onSubmit(res);
+      onClose();
+    } catch (err: any) {
+      setError(err?.message || 'An error occurred');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    onSubmit(res);
-    onClose();
-  } catch (err: any) {
-    setError(err?.message || 'An error occurred');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -86,8 +100,10 @@ const endISO = toBackendOffset(endTime);
               onChange={(e) => setSelectedRoomId(Number(e.target.value))}
               required
             >
-              <option value={0} disabled>Select a room</option>
-              {rooms.map(room => (
+              <option value={0} disabled>
+                Select a room
+              </option>
+              {rooms.map((room) => (
                 <option key={room.id} value={room.id}>
                   {room.name} - {room.location} (Capacity: {room.capacity})
                 </option>

@@ -9,7 +9,12 @@ interface DeleteConfirmModalProps {
   onConfirm: () => void;
 }
 
-export function DeleteConfirmModal({ title, message, onClose, onConfirm }: DeleteConfirmModalProps) {
+export function DeleteConfirmModal({
+  title,
+  message,
+  onClose,
+  onConfirm,
+}: DeleteConfirmModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
@@ -20,10 +25,7 @@ export function DeleteConfirmModal({ title, message, onClose, onConfirm }: Delet
           <div className="ml-3">
             <h3 className="text-lg font-medium text-gray-900">{title}</h3>
           </div>
-          <button
-            onClick={onClose}
-            className="ml-auto text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="ml-auto text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -33,16 +35,10 @@ export function DeleteConfirmModal({ title, message, onClose, onConfirm }: Delet
         </div>
 
         <div className="flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="btn-secondary"
-          >
+          <button onClick={onClose} className="btn-secondary">
             Cancel
           </button>
-          <button
-            onClick={onConfirm}
-            className="btn-danger"
-          >
+          <button onClick={onConfirm} className="btn-danger">
             Delete
           </button>
         </div>
