@@ -1,71 +1,89 @@
-# Meeting-Room-Scheduler
+
  docker-compose --env-file .env up --build
- docker-compose -f docker-compose.dev.yml up --build
-echo -n "mensaje a firmar" | openssl dgst -sha512 -hmac "tu-clave-secreta"
-# 🏢 Sistema de Reservas de Salas
+ 
 
-Plataforma avançada para agendamento de salas com autenticação, painel administrativo, validação de conflitos, notificações por e-mail, pagamentos e mensageria assíncrona.
 
-## 🔧 Tecnologias Utilizadas
+# Meeting-Room-Scheduler
+
+Descrição:
+Aplicativo de gerenciamento de reservas de salas de reunião, desenvolvido com Spring Boot no backend e React + TypeScript no frontend. Permite criar, editar e gerenciar reservas, com autenticação, validação de datas, controle de status e notificações.
+
+##  Tecnologias Utilizadas
 
 ### Backend
 - Java 17 + Spring Boot
 - Spring Data JPA + PostgreSQL
 - Spring Security (JWT)
-- RabbitMQ (Mensageria)
-- Stripe API (Pagamentos)
-- MailHog (Envio de E-mails)
+- RabbitMQ AMQP (Mensageria)
+- Jackson para serialização JSON e suporte a datas ISO
+- MAILHOG SMTP (Envio de E-mails)
 - Swagger (Documentação de API)
+- Docker (para conteinerização)
 
 ### Frontend
-- React + TypeScript
-- Tailwind CSS
-- Zustand ou Redux
-- React Router
-- React Calendar
+- Next.js (next) – framework React para SSR e roteamento.
+- React (react, react-dom) – biblioteca principal para UI.
+- Tailwind CSS (tailwindcss, @tailwindcss/postcss) – estilização moderna e responsiva.
+- Zustand – gerenciamento de estado global leve.
+- Axios – requisições HTTP para a API do backend.
+- React Query (@tanstack/react-query, @tanstack/react-query-devtools) – gerenciamento de estado assíncrono e cache de dados.
+- Headless UI + Heroicons – componentes acessíveis e ícones.
+- Lucide React – ícones adicionais.
+- Prettier – formatação de código.
+- TypeScript – tipagem estática para maior robustez.
 
 ---
 
-## 📦 Funcionalidades
+##  Funcionalidades
 
-### Usuário
-- Autenticação com JWT
-- Visualização de reservas futuras
-- Agendamento de salas com validação de conflitos
-- Recebimento de e-mail após confirmação da reserva
-- Pagamento simulado via Stripe
-
-### Administrador
-- Cadastro, edição e exclusão de salas
-- Visualização global das reservas
-- Gerenciamento de usuários
-
+- Cadastro e login de usuários (admin e usuário comum)
+- Cadastro, edição e remoção de reservas
+- Controle de status da reserva (PENDING, CONFIRMED, CANCELLED)
+- Validação de datas no frontend e backend (@FutureOrPresent)
+- Visualização das reservas do usuário em lista detalhada
+- Notificações assíncronas via RabbitMQ
+- Conversão automática de datas para ISO 8601 / UTC
+- Modal de reserva dinâmico com validação de horário
+- Arquitetura preparada para eventos e pagamentos
 ---
 
-## 📁 Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 backend/
-├── controller/
-├── service/
-├── model/
-├── repository/
-├── dto/
 ├── config/
-├── utils/
-└── ...
+├── controller/
+├── dto/
+├── entities/
+├── exceptions/
+├── rabbit/
+├── repository/
+├── runner/
+├── service/
+└── security/
+
 frontend/
 ├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── store/
-│   ├── api/
-│   └── ...
+├──  app/
+│ ├─ admin/ # Painel admin
+│ ├─ dashboard/ # Dashboard do usuário
+│ ├─ login/
+│ ├─ signup/
+│ ├─ forgot-password/
+│ ├─ reset-password/
+│ ├─ reservation/
+│ └─room/
+│─ components/ # Componentes centrais
+├─ services/ # Chamadas API (auth, rooms, reservations)
+├─ lib/ # Custom React hooks
+├─ providers/ # Zustand store ou React Context
+├─ store/ # Zustand store ou React Context
+└─ types/ # Tipos TypeScript
 ```
 
 ---
 
-## 🚀 Como rodar localmente
+##  Como rodar localmente
 
 ### Pré-requisitos
 
@@ -73,15 +91,16 @@ frontend/
 - Node.js 18+
 - PostgreSQL
 - RabbitMQ
-- Conta no Mailtrap (https://mailtrap.io/)
-- Conta no Stripe (https://stripe.com/)
-- Docker (opcional)
+- Docker
 
 ### Backend
 
 ```bash
 # Acesse o backend
 cd backend
+
+Configure uma chave no seu .env com este codigo:1
+echo -n "x" | openssl dgst -sha512 -hmac "tu-clave-secreta"
 
 # Configure as variáveis no application.properties ou .env (se aplicável)
 # Exemplo:
@@ -105,10 +124,13 @@ npm install
 # Rode a aplicação
 npm run dev
 ```
-
+### Docker
+```bash
+docker-compose -f docker-compose.yml up --build
+```
 ---
 
-## 🧪 Testes
+##  Testes
 
 - Você pode testar a API usando o Swagger em:
 ```
@@ -121,55 +143,25 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
-## 📬 Integrações
+##  Integrações
 
 | Integração | Descrição |
 |------------|-----------|
-| Mailtrap | Simula envio de e-mails para testes |
-| Stripe | Mock de pagamentos na criação da reserva |
+| MAILHOG | Simula envio de e-mails para testes |
 | RabbitMQ | Fila para processar envio de e-mail em segundo plano |
 
 ---
 
-## 📆 Lógica de Conflito de Horários
-
-Ao reservar uma sala, o sistema verifica:
-- Se a sala já está reservada no mesmo horário
-- Se existe interseção entre datas/horários
-- Caso exista conflito, a reserva é rejeitada
-
----
-
-## 📸 Telas (em breve)
-
-- Tela de Login
-- Dashboard (Usuário/Admin)
-- Calendário de reservas
-- Formulário de nova reserva
-
----
-
-## 📌 Roadmap
-
-- [] Backend com autenticação e JPA
-- [] CRUD de salas
-- [] Lógica de reserva com conflitos
-- [] JWT + RBAC (User/Admin)
-- [ ] Integração Stripe
-- [ ] Integração Mailtrap via RabbitMQ
-- [ ] Calendário interativo
-- [ ] Deploy em Vercel + Railway
-
----
-
-## 🧠 Autor
+##  Autor
 
 Desenvolvido por **Luis Nunes**  
-👨‍💻 Projeto pessoal para aprofundamento em arquitetura moderna, integração de APIs e sistemas completos com frontend e backend.
+ Projeto pessoal para aprofundamento em arquitetura moderna, integração de APIs e sistemas completos com frontend e backend.
 
 ---
 
-## 📜 Licença
+
+
+##  Licença
 
 Este projeto é de uso livre para fins educacionais e portfólio.  
 Sinta-se à vontade para clonar, adaptar e expandir!

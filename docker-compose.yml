@@ -13,7 +13,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -30,11 +36,11 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: spring-app
+    ports:
+      - "8080:8080"
     depends_on:
       - postgres
       - rabbitmq
-    ports:
-      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -43,6 +49,13 @@ services:
       SPRING_RABBITMQ_PORT: ${RABBITMQ_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
     env_file:
       - .env
 
@@ -51,14 +64,19 @@ services:
       context: ./frontend/meetinroomsscheduler
       dockerfile: ../Dockerfile
     container_name: next-app
-    ports:
-      - "3000:3000"
     stdin_open: true
     tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/meetinroomsscheduler:/app
+      - /app/node_modules    # evita sobrescrever node_modules do container
     depends_on:
       - backend
     env_file:
       - .env
+    command: npm run dev
+
 
 volumes:
   postgres_data:
