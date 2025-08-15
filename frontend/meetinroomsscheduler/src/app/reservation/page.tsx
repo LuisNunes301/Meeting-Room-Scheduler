@@ -105,11 +105,11 @@ export default function ReservationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-1">Start Time</h4>
-                    <p className="text-sm text-gray-900">{reservation.startTime.split(' ')[0]}</p>
+                    <p className="text-sm text-gray-900">{new Date(reservation.startTime).toISOString().slice(0, 16).replace('T', ' ')}</p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 mb-1">End Time</h4>
-                    <p className="text-sm text-gray-900">{reservation.endTime.split(' ')[0]}</p>
+                    <p className="text-sm text-gray-900">{new Date(reservation.endTime).toISOString().slice(0, 16).replace('T', ' ')}</p>
                   </div>
                 </div>
 

@@ -190,7 +190,7 @@ export default function AdminReservationsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {reservation.createdAt}
+                        {new Date(reservation.createdAt).toISOString().split('T')[0]}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">

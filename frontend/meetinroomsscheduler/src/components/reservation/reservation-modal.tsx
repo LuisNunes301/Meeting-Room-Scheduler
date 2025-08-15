@@ -27,41 +27,50 @@ export const ReservationModal = ({ mode, reservation, onClose, onSubmit }: Reser
       .catch(() => setError('Failed to load rooms'));
   }, []);
 
-   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedRoomId) return setError('Please select a room');
-    if (!startTime || !endTime) return setError('Start and end time are required');
-    if (new Date(endTime) <= new Date(startTime)) return setError('End time must be after start time');
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    setIsSubmitting(true);
-    setError(null);
+  if (!selectedRoomId) return setError('Please select a room');
+  if (!startTime || !endTime) return setError('Start and end time are required');
 
-    try {
-      let res: Reservation;
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
 
-      // Converte para ISO UTC
-      const startISO = new Date(startTime).toISOString();
-      const endISO = new Date(endTime).toISOString();
+  if (endDate <= startDate) return setError('End time must be after start time');
 
-      if (mode === 'create') {
-        const payload: CreateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
-        res = await reservationService.createReservation(payload);
-      } else if (mode === 'edit' && reservation) {
-        const payload: UpdateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
-        res = await reservationService.updateReservationUser(reservation.id, payload);
-      } else {
-        throw new Error('Invalid mode');
-      }
+  setIsSubmitting(true);
+  setError(null);
 
-      onSubmit(res);
-      onClose();
-    } catch (err: any) {
-      setError(err?.message || 'An error occurred');
-    } finally {
-      setIsSubmitting(false);
+  try {
+    let res: Reservation;
+
+    // Converte datetime-local para formato ISO sem 'Z'
+    const toBackendOffset = (localDateTime: string) => {
+  const date = new Date(localDateTime);
+  return date.toISOString(); // já retorna em formato ISO com 'Z' (UTC)
+};
+
+const startISO = toBackendOffset(startTime);
+const endISO = toBackendOffset(endTime);
+
+    if (mode === 'create') {
+      const payload: CreateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
+      res = await reservationService.createReservation(payload);
+    } else if (mode === 'edit' && reservation) {
+      const payload: UpdateReservationRequest = { roomId: selectedRoomId, startTime: startISO, endTime: endISO };
+      res = await reservationService.updateReservationUser(reservation.id, payload);
+    } else {
+      throw new Error('Invalid mode');
     }
-  };
 
+    onSubmit(res);
+    onClose();
+  } catch (err: any) {
+    setError(err?.message || 'An error occurred');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
